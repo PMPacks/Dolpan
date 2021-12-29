@@ -1,0 +1,571 @@
+name: Tool[PTK]
+main: Tool\Loader
+version: 2.0.0
+api: [2.1.0, 2.0.0]
+
+permissions:
+    tool:
+        default: false
+        description: "Allow to access to every Tool feature"
+        children:
+            tool.ban:
+                default: false
+                description: "Ban utilities nodes"
+                children:
+                    tool.ban.exempt:
+                        default: op
+                        description: "Prevent the player from being banned"
+            tool.colorchat:
+                default: op
+                description: "Allow to chat using colors!"
+            tool.afk:
+                default: false
+                description: "Toggle the AFK status"
+                children:
+                    tool.afk.use:
+                        default: true
+                        description: "Change self AFK status"
+                    tool.afk.other:
+                        default: op
+                        description: "Change other's AFK status"
+                    tool.afk.preventauto:
+                        default: op
+                        description: "Players with this permission will NOT be put into AFK after a period of inaction"
+                    tool.afk.kickexempt:
+                        default: op
+                        description: "Exempt the user from being auto kicked for AFK"
+            tool.antioch:
+                default: op
+                description: "Place live TNT at the spot you're looking at"
+            tool.back:
+                default: false
+                description: "Return to your previous spot before teleporting"
+                children:
+                    tool.back.use:
+                        default: op
+                        description: "Return to your previous spot before teleporting"
+                    tool.back.ondeath:
+                        default: op
+                        description: "Return to the place where you die"
+            tool.balance:
+                default: false
+                description: "Allow players to see their balance"
+                children:
+                    tool.balance.use:
+                        default: true
+                        description: "See your current balance"
+                    tool.balance.other:
+                        default: op
+                        description: "Let players to see other's balance"
+            tool.bigtree:
+                default: op
+                description: "Spawns a big tree"
+            tool.break:
+                default: false
+                description: "Breaks the block you're looking at"
+                children:
+                    tool.break.use:
+                        default: op
+                        description: "Breaks the block you're looking at"
+                    tool.break.bedrock:
+                        default: op
+                        description: "Allow to break Bedrock"
+            tool.broadcast:
+                default: op
+                description: "Broadcast a message"
+            tool.burn:
+                default: op
+                description: "Set a player on fire"
+            tool.clearinventory:
+                default: false
+                description: "Clear a player inventory"
+                children:
+                    tool.clearinventory.use:
+                        default: op
+                        description: "Clear self inventory"
+                    tool.clearinventory.other:
+                        default: op
+                        description: "Clear other's inventory"
+            tool.compass:
+                default: true
+                description: "Display your current bearing direction"
+            tool.condense:
+                default: true
+                description: "Compact items into blocks in your inventory!"
+            tool.delhome:
+                default: true
+                description: "Remove one of your homes"
+            tool.delwarp:
+                default: op
+                description: "Remove a warp"
+            tool.depth:
+                default: true
+                description: "Get your current height related to sea-level"
+            tool.eco:
+                default: false
+                description: "Access to the /eco command"
+                children:
+                    tool.eco.use:
+                        default: op
+                        description: "Access the /eco command"
+                    tool.eco.loan:
+                        default: true
+                        description: "Allow players to have negative balance"
+            tool.tool:
+                default: op
+                description: "See the current Essentials version"
+            tool.extinguish:
+                default: false
+                description: "Extinguish a player"
+                children:
+                    tool.extinguish.use:
+                        default: op
+                        description: "Extinguish yourself"
+                    tool.extinguish.other:
+                        default: op
+                        description: "Extinguish other players"
+            tool.fly:
+                default: false
+                description: "Fly in Survival or Adventure mode!"
+                children:
+                    tool.fly.use:
+                        default: op
+                        description: "Switch your own fly mode"
+                    tool.fly.others:
+                        default: op
+                        description: "Make other players fly!"
+            tool.feed:
+                default: false
+                description: "Feed yourself or other players"
+                children:
+                    tool.feed.use:
+                        default: op
+                        description: "Feed yourself"
+                    tool.feed.other:
+                        default: op
+                        description: "Feed other players"
+            tool.gamemode:
+                default: op
+                description: "Change your gamemode!"
+            tool.geoip:
+                default: false
+                description: "GeoLocation nodes"
+                children:
+                    tool.geoip.show:
+                        default: op
+                        description: "See other's location in the real world"
+                    tool.geoip.hide:
+                        default: false
+                        description: "Hide location from other users that 'have' permissions to see it"
+            tool.getpos:
+                default: false
+                description: "Get any player's position"
+                children:
+                    tool.getpos.use:
+                        default: op
+                        description: "Get your position"
+                    tool.getpos.other:
+                        default: op
+                        description: "Get other player's position"
+            tool.god:
+                default: false
+                description: "Prevent a player to take any damage"
+                children:
+                    tool.god.use:
+                        default: op
+                        description: "Prevent you to take damage"
+                    tool.god.other:
+                        default: op
+                        description: "Prevent other players to take damage"
+                    tool.god.pvp:
+                        default: op
+                        description: "Let you attack other players while you're in god mode"
+            tool.hat:
+                default: op
+                description: "Get some new cool headgear!"
+            tool.heal:
+                default: false
+                description: "Heal yourself or other players"
+                children:
+                    tool.heal.use:
+                        default: op
+                        description: "Heal yourself"
+                    tool.heal.other:
+                        default: op
+                        description: "Heal other players"
+            tool.home:
+                default: false
+                description: "Get to your home!"
+                children:
+                    tool.home.use:
+                        default: true
+                        description: "List or teleport to your homes"
+                    tool.home.bed:
+                        default: true
+                        description: "Set a home where you last sleep"
+            tool.item:
+                default: op
+                description: "Gives yourself an item"
+            tool.itemdb:
+                default: op
+                description: "Let you see information attached to an item"
+            tool.itemspawn:
+                default: op
+                description: "Let you spawn any item using /item"
+                children:
+                    tool.itemspawn.item-all:
+                        default: op
+                        description: "Let you spawn any item"
+                    #tool.itemspawn.exempt:
+                    #    default: op
+                    #    description: "Allow the spawning of blacklisted items"
+            tool.jump:
+                default: op
+                description: "Teleport you to the block you're looking at"
+            tool.kickall:
+                default: op
+                description: "Kick all the online players except the sender"
+            tool.kill:
+                default: false
+                description: "Kill a player!"
+                children:
+                    tool.kill.use:
+                        default: op
+                        description: "Commit to suicide"
+                    tool.kill.other:
+                        default: op
+                        description: "Kill other players"
+            tool.kit2:
+                default: false
+                description: "Access to the /kit2 command"
+                children:
+                    tool.kit2.use:
+                        default: true
+                        description: "Access to the /kit2 command"
+                    tool.kit2.other:
+                        default: op
+                        description: "Give a kit2 to other players"
+            tool.lightning:
+                default: op
+                description: "Strike a lightning!"
+            tool.more:
+                default: op
+                description: "Get a stack of the item you're holding"
+            tool.msg:
+                default: true
+                description: "Send private messages to other players"
+            tool.mute:
+                default: false
+                description: "Mute a player from the chat"
+                chldren:
+                    tool.mute.use:
+                        default: op
+                        description: "Mute a player from the chat"
+                    tool.mute.exempt:
+                        default: op
+                        description: "Prevent a player from being muted"
+                    tool.mute.notify:
+                        default: true
+                        description: "Tell a user until when is muted from the chat"
+            tool.near:
+                default: false
+                description: "Let you search for near players"
+                children:
+                    tool.near.use:
+                        default: op
+                        description: "Display players near to you"
+                    tool.near.other:
+                        default: op
+                        description: "Let you see who is near to another player"
+            tool.nick:
+                default: false
+                description: "Change your or others name"
+                children:
+                    tool.nick.use:
+                        default: op
+                        description: "Change self nickname"
+                    tool.nick.other:
+                        default: op
+                        description: "Change others name"
+            tool.nuke:
+                default: false
+                description: "Spawn a thin carpet of bomb"
+                children:
+                    tool.nuke.use:
+                        default: op
+                        description: "Spawn a thin carpet of bomb"
+                    tool.nuke.other:
+                        default: op
+                        description: "Allow to spawn a nuke on other player's position"
+            tool.oversizedstacks:
+                default: op
+                description: "Allow to get oversized stacks"
+            tool.pay:
+                default: true
+                description: "Pay another player from your balance"
+            tool.powertool:
+                default: false
+                description: "Allow to toggle and use PowerTool"
+                children:
+                    tool.powertool.use:
+                        default: op
+                        description: "Access the /powertool command"
+                    tool.powertool.append:
+                        default: op
+                        description: "Let you add multiple commands to the PowerTool"
+            tool.powertooltoggle:
+                default: op
+                description: "Allow to disable PowerTool from all the items (of a player)"
+            tool.ptime:
+               default: false
+               description: "Change your current time!"
+               children:
+                    tool.ptime.use:
+                        default: op
+                        description: "Change your own time"
+                    tool.ptime.other:
+                        default: op
+                        description: "Change other's time"
+            tool.pvp:
+                default: op
+                description: "Toggle PvP on/off"
+            tool.realname:
+                default: op
+                description: "See a player's realname"
+            tool.repair:
+                default: false
+                description: "Repair the item you're holding"
+                children:
+                    tool.repair.use:
+                        default: op
+                        description: "Access the /repair command"
+                    tool.repair.all:
+                        default: op
+                        description: "Let you repair all the damaged tools/armors on your inventory"
+                    tool.repair.armor:
+                        default: op
+                        description: "Let your repair the equipped armor while using /repair all"
+            tool.reply:
+                default: true
+                description: "Allow the player to quick reply to the last player that messaged him"
+            tool.seen:
+                default: op
+                description: "Check player's last online time"
+            tool.sell:
+                default: true
+                description: "Sell an item with the /sell command"
+            tool.sethome:
+                default: true
+                description: "Create/update a home"
+            tool.setspawn:
+                default: op
+                description: "Change your server's general spawn"
+            tool.setwarp:
+                default: op
+                description: "Create/update a warp"
+            tool.setworth:
+                default: op
+                description: "Sets the worth of an item"
+            tool.sign:
+                default: false
+                description: "Allow to manage special signs"
+                children:
+                    tool.sign.break:
+                        default: false
+                        description: "Allow to remove special signs"
+                        children:
+                            tool.sign.break.free:
+                                default: op
+                                description: "Allow to remove Free signs"
+                            tool.sign.break.gamemode:
+                                default: op
+                                description: "Allow to remove Gamemode signs"
+                            tool.sign.break.heal:
+                                default: op
+                                description: "Allow to remove heal signs"
+                            tool.sign.break.kit2:
+                                default: op
+                                description: "Allow to remove kit2 signs"    
+                            tool.sign.break.repair:
+                                default: op
+                                description: "Allow to remove repair signs"
+                            tool.sign.break.time:
+                                default: op
+                                description: "Allow to remove Time signs"
+                            tool.sign.break.teleport:
+                                default: op
+                                description: "Allow to remove Teleport signs"
+                            tool.sign.break.warp:
+                                default: op
+                                description: "Allow to remove Warp signs"
+                    tool.sign.color:
+                        default: op
+                        description: "Allow to create colored signs"
+                    tool.sign.create:
+                        default: false
+                        description: "Allow to create special signs"
+                        children:
+                            tool.sign.create.free:
+                                default: op
+                                description: "Allow to create Free signs"
+                            tool.sign.create.gamemode:
+                                default: op
+                                description: "Allow to create Gamemode signs"
+                            tool.sign.create.heal:
+                                default: op
+                                description: "Allow to create Heal signs"
+                            tool.sign.create.kit2:
+                                default: op
+                                description: "Allow to create Kit2 signs"
+                            tool.sign.create.repair:
+                                default: op
+                                description: "Allow to create Repair signs"
+                            tool.sign.create.time:
+                                default: op
+                                description: "Allow to create Time signs"
+                            tool.sign.create.teleport:
+                                default: op
+                                description: "Allow to create Teleport signs"
+                            tool.sign.create.warp:
+                                default: op
+                                description: "Allow to create Warp signs"
+                    tool.sign.use:
+                        default: false
+                        description: "Allow to use special signs"
+                        children:
+                            tool.sign.use.free:
+                                default: op
+                                description: "Allow to use Free signs"
+                            tool.sign.use.gamemode:
+                                default: op
+                                description: "Allow to use Gamemode signs"
+                            tool.sign.use.heal:
+                                default: op
+                                description: "Allow to use Heal signs"
+                            tool.sign.use.kit2:
+                                default: op
+                                description: "Allow to use Kit2 signs"
+                            tool.sign.use.repair:
+                                default: op
+                                description: "Allow to use Repair signs"
+                            tool.sign.use.time:
+                                default: op
+                                description: "Allow to use Time signs"
+                            tool.sign.use.teleport:
+                                default: op
+                                description: "Allow to use Teleport signs"
+                            tool.sign.use.warp:
+                                default: op
+                                description: "Allow to use Warp signs"
+            tool.spawn:
+                default: false
+                description: "Teleport to server's main spawn"
+                children:
+                    tool.spawn.use:
+                        default: true
+                        description: "Teleport to server's spawn position"
+                    tool.spawn.other:
+                        default: op
+                        description: "Teleport others to the server's main spawn"
+            tool.speed:
+                default: false
+                description: "TChỉnh speed"
+                children:
+                    tool.speed.use:
+                        default: true
+                        description: "Chỉnh speed"
+                    tool.speed.other:
+                        default: op
+                        description: "Chỉnh speed"
+            tool.sudo:
+                default: false
+                description: "Run a command as another player"
+                children:
+                    tool.sudo.use:
+                        default: op
+                        description: "Run a command as another player"
+                    tool.sudo.exempt:
+                        default: false
+                        description: "Prevent from being Sudo'ed"
+            tool.suicide:
+                default: op
+                description: "Kill yourself"
+            tool.tpa:
+                default: true
+                description: "Request a player to teleport to its position"
+            tool.dongy:
+                default: true
+                description: "Accept a Teleport Request"
+            tool.tpahere:
+                default: true
+                description: "Request a player to teleport to your position"
+            tool.tpall:
+                default: op
+                description: "Teleport all the online players to you"
+            tool.tuchoi:
+                default: true
+                description: "Decline a Teleport Request"
+            tool.tphere:
+                default: op
+                description: "Teleport another player to you"
+            tool.tempban:
+                default: op
+                description: "Temporary bans a player"
+            tool.top:
+                default: op
+                description: "Teleport to the highest block above you"
+            tool.tree:
+                default: op
+                description: "Spawns a tree"
+            tool.unlimited:
+                default: false
+                description: "Allow the player to place unlimited blocks"
+                children:
+                    tool.unlimited.use:
+                        default: op
+                        description: "Access the /unlimited command"
+                    tool.unlimited.other:
+                        default: op
+                        description: "Allow to enable unlimited placing of blocks to other players"
+            tool.update:
+                default: false
+                description: "Allow to update Tool to the latest available version, or to check if there is one available"
+                children:
+                    tool.update.use:
+                        default: op
+                        description: "Allow to update Tool with the '/tool update' command "
+                    tool.update.notify:
+                        default: op
+                        description: "Get notified when a new version of Tool if found"
+            tool.vanish:
+                default: false
+                description: "Hide yourself or another player"
+                children:
+                    tool.vanish.use:
+                        default: op
+                        description: "Hide yourself from other players"
+                    tool.vanish.other:
+                        default: op
+                        description: "Hide other players"
+                    tool.vanish.pvp:
+                        default: op
+                        description: "Let you attack other players while you're vanished"
+            tool.warp:
+                default: false
+                description: "Teleport to a warp"
+                children:
+                    tool.warp.use:
+                        default: op
+                        description: "Teleport to a warp"
+                    tool.warp.other:
+                        default: op
+                        description: "Teleport other players to a warp"
+            tool.whois:
+                default: true
+                description: "Display information about a player"
+            tool.world:
+                default: op
+                description: "Teleport to another world"
+            tool.worth:
+                default: true
+                description: "Get the price of an item"

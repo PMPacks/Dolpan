@@ -1,0 +1,166 @@
+---
+messages-version: "2.0"
+language: "en"
+cmds:
+  addgroup:
+    desc: "§b→§aTạo group mới."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /addgroup <Tên Của Group>"
+    messages:
+      group_added_successfully: "§b→§aĐã thêm %var0% vào danh sách các group thành công."
+      group_already_exists: "§b→§aGroup %var0% đã có rồi."
+      invalid_group_name: "§b→§aTên Group không hợp lệ."
+  addparent:
+    desc: "§b→§aAdds a group to another group inheritance list."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /addparent <target_group> <parent_group>"
+    messages:
+      addparent_successfully: "§b→§aAdded %var0% to group %var1%'s inheritance list."	 
+      target_already_inherits: "§b→§aGroup %var0% already inherits %var1%."     
+  defgroup:
+    desc: "§b→§aDat lai group mac dinh."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /defgroup <Tên Của Group> [Tên Thế Giới]"
+    messages:
+      defgroup_successfully: "§b→§aGroup mặc định đã được đặt lại thành %var0%."
+      group_not_exist: "§b→§aGroup %var0% không có."
+      level_not_exist: "§b→§aWorld %var0% không có."
+  fperms:
+    desc: "§b→§aXem permissions cua moi plugin."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /fperms <plugin>"
+    messages:
+      no_plugin_perms: "§b→§aPlugin %var0% không có permission nào."
+      plugin_not_exist: "§b→§aPlugin %var0% không tồn tại."
+      plugin_perms_list: "§b→§aDanh sách permission %var0% (%var1% / %var2%) : "
+  groups:
+    desc: "§b→§aXem danh sach tat ca cac group."
+    messages:
+      all_registered_groups: "§b→§aCác group hiện có: %var0%"
+  grpinfo:
+    desc: "§b→§aXem thong tin cua mot group nao do."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /grpinfo <Tên Của Group> [Tên Thế Giới]"
+    messages:
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      grpinfo_header: "§b→§a-- Thông tin group %var0% --"
+      grpinfo_alias: "§b→§aTÊN GIẢ: %var0%"
+      grpinfo_default: "§b→§aDEFAULT: %var0%" 
+      grpinfo_parents: "§b→§aPARENTS: %var0%"	  
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+  listgperms: 
+    desc: "§b→§aXem tat ca cac perm cua mot group nao do."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /listgperms <Tên Của Group> <Số Trang> [Tên Thế Giới]"
+    messages:
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      group_perms_list: "§b→§aDanh sách perm của group %var0% (%var1% / %var2%) : "
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      no_group_perms: "§b→§aGroup %var0% không hề có perm nào."
+  listuperms: 
+    desc: "§b→§aXem tat ca perm cua nguoi choi."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /listuperms <Tên Người Chơi> <Số Trang> [Tên Thế Giới]"
+    messages:
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      no_user_perms: "§b→§aNgười chơi %var0% không hề có perm nào."
+      user_perms_list: "§b→§aDanh sách tất cả người chơi có perm %var0% (%var1% / %var2%) : " 
+  ppinfo: 
+    desc: "§b→§aXem thong tin cua PurePerms."
+    messages:
+      ppinfo_console: "§b→§aBạn đang sử dụng PurePerms v%var0% bởi %var1% và được chuyển sang tiếng việt bởi PTK-KienPham."
+      ppinfo_player: "§b→§aServer này đang sử dụng phiên bản PurePerms v%var0% bởi %var1% và được việt hóa bởi PTK-KienPham."
+  ppreload: 
+    desc: "§b→§aTai lai config cua PurePerms."
+    messages: 
+      successfully_reloaded: "§b→§aTất cả config đã được tải mới lại."
+  ppsudo:
+    desc: "§b→§aRegisters or logs into your Noeul account."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /ppsudo <login / register>"
+    messages:
+      already_registered: "§b→§aThis account is already registered."
+      deauth_01: "§b→§aThis server uses Noeul v%var0% to protect your account."
+      deauth_02: "§b→§aYou must authenticate your account first."
+      deauth_03: "§b→§aPlease register or login to your account using /ppsudo command"
+      invalid_sender: "§b→§aThis command should be only used in-game."
+      login_usage: "§b→§a§b→§6Xin hãy sử dụng: /ppsudo login <password>"
+      not_registered: "§b→§aThis account is not registered."
+      password_too_short: "§b→§aYour password does NOT meet minimum length (%var0%) requirements."
+      register_usage: "§b→§a§b→§6Xin hãy sử dụng: /ppsudo register <password>"
+      successfully_logged_in: "§b→§aYou are now logged in."	 
+      successfully_registered: "§b→§aYour account has been successfully registered."
+      unregister_usage: "§b→§a§b→§6Xin hãy sử dụng: /ppsudo unregister <password>" 	
+  rmgroup: 
+    desc: "§b→§aXoa group."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /rmgroup <Tên Của Group>"
+    messages:
+      group_removed_successfully: "§b→§aĐã xóa %var0% khỏi danh sách group thành công."
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      invalid_group_name: "§b→§aTên group không hợp lệ."
+  rmparent:
+    desc: "§b→§aRemoves a group from another group inheritance list."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /rmparent <target_group> <parent_group>"
+    messages:
+      rmparent_successfully: "§b→§aRemoved %var0% from group %var1%'s inheritance list."		  
+  setgperm: 
+    desc: "§b→§aThem perm vao group."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /setgperm <Tên Của Group> <Quyền> [Tên Thế Giới]"
+    messages:
+      gperm_added_successfully: "§b→§aĐã thêm perm %var0% vào group thành công."
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+  setgroup: 
+    desc: "§b→§aSet group cho người chơi."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /setgroup <Tên Người Chơi> <Tên Của Group> <exp_time> [Tên Thế Giới]"
+    messages:
+      access_denied_01: "§b→§aBạn không có quyền để cấp group của người chơi thành %var0%."
+      access_denied_02: "§b→§aBạn không có quyền để đổi group người chơi thành %var0%."    
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      on_player_group_change: "§b→§aGroup của bạn đã được thay đổi thành %var0%!"
+      setgroup_successfully: "§b→§aĐã thêm %var0% vào group thành công."
+  setuperm: 
+    desc: "§b→§aThem perm cho nguoi choi."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /setuperm <Tên Người Chơi> <Quyền> [Tên Thế Giới]"
+    messages:
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      uperm_added_successfully: "§b→§aĐã thêm permission %var0% cho %var1% thành công."
+  unsetgperm: 
+    desc: "§b→§aXoa perm cua mot group nao do."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /unsetgperm <Tên Của Group> <Quyền> [Tên Thế Giới]"
+    messages:
+      gperm_removed_successfully: "§b→§aĐã xóa permission %var0% của group này thành công."
+      group_not_exist: "§b→§aGroup %var0% không tồn tại."
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+  unsetuperm: 
+    desc: "§b→§aXóa quyền của người chơi."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /unsetuperm <Tên Người Chơi> <Quyền> [Tên Thế Giới]"
+    messages: 
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      uperm_removed_successfully: "§b→§aĐã xóa permission %var0% từ %var1% thành công."
+  usrinfo: 
+    desc: "§b→§aXem thong tin nguoi choi."
+    usage: "§b→§a§b→§6Xin hãy sử dụng: /usrinfo <Tên Người Chơi> [Tên Thế Giới]"
+    messages:
+      level_not_exist: "§b→§aWorld %var0% không tồn tại."
+      status_online: "§b→§aONLINE!"
+      status_offline: "§b→§aOFFLINE..."
+      usrinfo_header: "§b→§a-- Thông tin người chơi của %var0% --"
+      usrinfo_username: "§b→§aUSERNAME: %var0%"
+      usrinfo_status: "§b→§aSTATUS: %var0%"
+      usrinfo_ip: "§b→§aIP: %var0%"
+      usrinfo_uuid: "§b→§aUNIQUE ID: %var0%"
+      usrinfo_group: "§b→§aGROUP: %var0%"
+      usrinfo_exp: "§b→§aExpTime: %var0%"
+      unknown: "§b→§cKHÔNG XÁC ĐỊNH"
+logger_messages:
+  getConfigValue_01: "§b→§aKey %var0% không tìm thấy trong config.yml."
+  getDefaultGroup_01: "§b→§aCó hơn một group mặc định trong file group."
+  getDefaultGroup_02: "§b→§aKhông có group mặc định nào trong file group."
+  getDefaultGroup_03: "§b→§aCài đặt group mặc định tự động."
+  getGroup_01: "§b→§aGroup %var0% không được tìm thấy."
+  getGroup_02: "§b→§aGroup %var0% dữ liệu không hợp lệ hoặc bị hỏng."
+  onLoad_01: "§b→§aHỗ trợ nhiều thế giới đã bị hủy kích hoạt."
+  onLoad_02: "§b→§aĐừng quên set cài đặt enable-multiworld-perms trong config.yml thành true nếu bạn muốn set perm ở nhiều thế giới khác nhau!"
+  onLoad_03: "§b→§aHỗ trợ nhiều thế giới đã được kích hoạt."
+  registerPlayer: "§b→§aRegistering player %var0%..."
+  setProvider_MySQL: "§b→§aSet data provider to MySQL."
+  setProvider_YAMLv1: "§b→§aSet data provider to YAMLv1."
+  setProvider_YAMLv2: "§b→§aSet data provider to YAMLv2."
+  setProvider_NotFound: "§b→§aProvider %var0% does NOT exist. Setting the data provider to default."
+  unregisterPlayer: "§b→§aUnregistering player %var0%..."
+  YAMLProvider_InvalidGroupsSettings: "§b→§aCÀI ĐẶT TRONG GROUP.YML KHÔNG HỢP LỆ: Vui lòng kiểm tra lại trong file groups.yml."
+...

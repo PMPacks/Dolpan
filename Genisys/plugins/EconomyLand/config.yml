@@ -1,0 +1,9 @@
+---
+handler-priority: 10
+white-world-protection: []
+non-check-worlds: []
+buying-disallowed-worlds: [Lobby,Plot,Shop,PVP,Parkour,Parkour2]
+player-land-limit: 9999
+price-per-y-axis: 500
+database-type: yaml
+...

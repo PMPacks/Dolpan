@@ -1,0 +1,14 @@
+#################################
+
+# ClearChat Minecraft PE Plugin
+# Author: Mineboy210
+
+#################################
+
+# ClearChat command permission
+Permission: cc.perm
+
+# ClearChat message
+Message: §7[§6ClearChat§7] §aThe chat has been cleared
+
+#################################

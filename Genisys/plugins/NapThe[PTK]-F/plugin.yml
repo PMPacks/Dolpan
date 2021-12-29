@@ -1,0 +1,7 @@
+name: NapThe[PTK]-F
+main: PTK\NapThe\Main
+version: 1.0
+api: [2.0.0, 3.0.0]
+commands:
+  vitien:
+    description: Nạp Thẻ command!

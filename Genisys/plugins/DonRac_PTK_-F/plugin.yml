@@ -1,0 +1,19 @@
+name: DonRac[PTK]
+main: PTK\DonRac\DRMain
+api: [2.0.0, 3.0.0]
+load: STARTUP
+author: PTK-KienPham
+description: "Plugin Dọn Rác Bởi PTK-KienPham"
+version: 2.0
+commands:
+ xoa:
+  permissions: donrac.xoa
+  description: "Xóa rác"
+permissions:
+ donrac:
+  description: "Plugin Dọn Rác"
+  default: op
+  children:
+   donrac.xoa:
+    default: op
+    description: ""

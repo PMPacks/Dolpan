@@ -1,0 +1,14 @@
+---
+#Create op SignEnchant
+Create: Create op SignEnchant
+#How to create
+Create2: Line1 Enchant Line2 ID Line3 price Line4 Level
+#Successfully built
+Create3: Successfully Create
+#NoMoney
+Money: Not enough money
+#Off Sign Enchant
+Off: closed
+#Off Sign Enchant OP
+Off2: Can not close the store
+...

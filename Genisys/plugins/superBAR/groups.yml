@@ -1,0 +1,154 @@
+#This is config for setting every PurePerms group. Groups are automatically generated.
+#If you created new group, reload PP, and enter "/sb reload" to see it here.
+# %DEFAULT% - take the value from the default config.
+#Another strings - at the default config.
+
+Guest:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Admin:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Owner:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+OP:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Youtuber:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+D:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+CanhSat:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+§aVoter:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Police:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Quậy:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Builder:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+vip1:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+PoliceOp:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Plantinum:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Co-Owner:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Co-Owner2:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Voter:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Helper:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+anhyêuem:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Lon:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+Boss:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+vip2:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+ThanhTroll:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+hv:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"
+
+tg:
+  hud-format: "%DEFAULT%"
+  hud-shift-level: "%DEFAULT%"
+  type: "%DEFAULT%"
+  time-format: "%DEFAULT%"

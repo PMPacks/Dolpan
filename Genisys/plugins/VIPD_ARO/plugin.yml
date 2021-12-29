@@ -1,0 +1,19 @@
+﻿name: VipDay[PTK]
+main: vip\main
+version: 1.0.0
+api: [2.0.0, 3.0.0]
+load: POSTWORLD
+author: PTK-KienPham
+commands:
+ setvip:
+  description: "Dat vip"
+  permission: setvip.command.setvip
+permissions:
+ setvip.command.help:
+  default: op
+  description: VIP command
+ setvip.command.vip:
+  default: op
+ setvip.command.remove:
+  default: op
+  description: VIP command remove VIP

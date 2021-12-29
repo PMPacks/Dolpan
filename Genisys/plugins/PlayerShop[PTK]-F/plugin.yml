@@ -1,0 +1,22 @@
+name: PlayerShop[PTK]
+version: "3.0"
+author: PTK-KienPham
+main: PTK\PlayerShop\PlayerShop
+
+api: [1.12.0,2.0.0]
+
+permissions:
+ economypshop.*:
+  description: Allows all permissions to the player
+  children:
+   economypshop.shop.*:
+    description: Allows player all permissions related to shop
+    children:
+     economypshop.shop.create:
+      description: Allows player to create shop
+      default: true
+     economypshop.shop.buy:
+      description: Allows player to buy items from shop
+      default: true
+     economypshop.shop.destroy.others:
+      description: Allows player to destroy others' shop

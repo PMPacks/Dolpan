@@ -1,0 +1,19 @@
+---
+show-prefix: true
+show-messages-onjoin: true
+force-hub: false
+enable-hub-message: true
+hub-message: §aChào mừng tới HUB, {PLAYER}
+force-spawn: false
+enable-spawn-message: true
+spawn-message: Đã dịch chuyển tới {WORLD} Spawn
+enable-aliases: true
+teleport-on-death: 1
+hub:
+  world: Hub
+  X: 87.604500
+  "Y": 54.000000
+  Z: 15.440600
+  Yaw: 188
+  Pitch: 90
+...

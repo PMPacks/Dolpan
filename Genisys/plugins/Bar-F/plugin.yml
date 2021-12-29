@@ -1,0 +1,6 @@
+﻿name: Bar
+version: 0.1v_beta
+main: PTK\Bar\Main
+author: PTK-KienPham
+load: POSTWORLD
+api: [1.0.0, 2.0.0, 2.1.0, 3.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2]

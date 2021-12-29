@@ -1,0 +1,23 @@
+Genisys Crash Dump Tue Sep 26 15:41:36 +06 2017
+
+Error: Class Broadcaster\Main not found
+File: /src/spl/BaseClassLoader
+Line: 131
+Type: notice
+
+THIS CRASH WAS CAUSED BY A PLUGIN
+此次出错由插件引起
+
+Code:
+[122]      *
+[123]      * @return bool
+[124]      */
+[125]     public function loadClass($name){
+[126]         $path = $this->findClass($name);
+[127]         if($path !== null){
+[128]             include($path);
+[130] 	            if($this->getParent() === null){
+[132] 	            }
+[134]             }
+
+

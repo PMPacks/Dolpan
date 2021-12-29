@@ -1,0 +1,11 @@
+# Chào mừng tới cài đặt tin nhắn của Tool by PTK-KienPham
+version: 2.0.0
+
+messages:
+  afk:
+    self:
+      enable: "&b→&aBạn đã bật chế độ AFK!"
+      disable: "&b→&aBạn đã tắt chế độ AFK!"
+    other:
+      enable: "&b→&aNgười chơi &b@player &ađã bật chế độ AFK"
+      disable: "&b→&aNgười chơi &b@player &ađã tắt chế độ AFK!"

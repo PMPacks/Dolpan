@@ -1,0 +1,8 @@
+name: Idea_Aro
+version: 1.0
+api: 2.0.0
+main: Idea\Idea
+author: PVHB
+commands:
+ idea:
+  description: "Idea"

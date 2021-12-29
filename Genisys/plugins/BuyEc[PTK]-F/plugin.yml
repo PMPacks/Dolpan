@@ -1,0 +1,9 @@
+name: BuyEc[PTK]
+main: PTK\BuyEc\Main
+version: 3.0
+api: [2.0.0, 3.0.0]
+commands:
+  buyec:
+    description: Mua Phù Phép.
+  listec:
+    description: Danh Sách Id Phù Phép.

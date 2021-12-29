@@ -1,0 +1,8 @@
+Genisys Crash Dump Mon Oct 2 08:20:47 +06 2017
+
+Error: Out of memory (allocated 222298112) (tried to allocate 131072 bytes)
+File: /src/pocketmine/Player
+Line: 4610
+Type: E_ERROR
+
+Code:

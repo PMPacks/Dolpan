@@ -1,0 +1,6 @@
+# Updated 10/01/17 12:21 by Genisys 1.1DEV-PTK
+# victim name | ban date | banned by | banned until | reason
+
+jaki678890976|2017-09-27 17:04:28 +0600|KienCool|Forever|Địt Mẹ M
+d|2017-10-01 12:20:53 +0600|KienCool|Forever|Sủa Cực Kì Nhiều
+duytnt|2017-10-01 12:21:15 +0600|KienCool|Forever|Sửa Cực Cực Nhiều

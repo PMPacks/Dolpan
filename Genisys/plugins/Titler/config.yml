@@ -1,0 +1,32 @@
+﻿# | \ | (_) ___| | _____ _ __| |_ 
+# |  \| | |/ _ \ |/ / _ \ '__| __|
+# | |\  | |  __/   <  __/ |  | |_ 
+# |_| \_|_|\___|_|\_\___|_|   \__|
+
+JoinTitle: "§e§l§kiii§r §l§bDolpan §e§kiii§r"
+
+#Tiêu đề khi người chơi tham gia. {player} và {world} có thể được sử dụng. Chỉ hiển thị cho người chơi tự.
+
+JoinSubtitle: "§bChào mừng công dân {player} !§r"
+
+#Phụ đề khi người chơi tham gia. {player} và {world} có thể được sử dụng. Chỉ hiển thị cho người chơi tự.
+
+WorldTitle: "§e§l§kiii§r §l§bDolpan §e§kiii§r"
+
+#Tiêu đề khi người chơi đi đến một thế giới khác. {player} và {world} có thể được sử dụng. Chỉ hiển thị cho người chơi tương tự.
+
+WorldSubtitle: "§bChào mừng công dân {player} !§r"
+
+#Phụ đề khi người chơi đi đến một thế giới khác. {player} và {world} có thể được sử dụng. Chỉ hiển thị cho người chơi tương tự.
+
+Fadein: 4
+
+#Thời gian nhạt dần trong vài giây. Đặt là -1 để sử dụng mặc định của máy khách.
+
+Duration: 4
+
+#Thời lượng của Tiêu đề trong giây. Đặt là -1 để sử dụng mặc định của máy khách.
+
+Fadeout: 4
+
+#Thời gian phai mờ trong vài giây. Đặt là -1 để sử dụng mặc định của máy khách.

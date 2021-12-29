@@ -1,0 +1,39 @@
+
+---
+# Set default data provider for PurePerms
+# - mysql, yamlv1, yamlv2
+data-provider: yamlv1
+
+# - en
+# Tiếng việt bởi PTK-KienPham
+default-language: en
+
+# Cấm sử dụng lệnh /op.
+disable-op: false
+
+# Setting this option will allow you to use per-world permissions
+# - true / false
+enable-multiworld-perms: false
+
+# Enables 'Noeul', a 'pointless' security management system for PurePerms
+# - true / false
+enable-noeul-sixtyfour: false
+
+# MySQL Settings (Only configure this if you are going to use MySQL data provider)
+mysql-settings:
+  host: "PurePerms-FTW.loveyou.all"
+  port: 3306
+  user: "YourUsernameGoesHere"
+  password: "YourPasswordGoesHere"
+  db: "YourDBNameGoesHere"
+  
+# Sets a minimum length for a Noeul password when registering a new account
+# - int  
+noeul-minimum-pw-length: 6
+  
+# Special thanks to @jazzwhistle for helping me with this cool feature! #JAZZWHISTLE-FTW
+# Ranks that can only be set on console
+# Also, users with a superadmin-rank can only have their rank changed on console
+# - array
+superadmin-ranks: ["OP"]
+...

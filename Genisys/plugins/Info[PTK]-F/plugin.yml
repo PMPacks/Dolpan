@@ -1,0 +1,66 @@
+name: Info[PTK]
+description: Thông tin của server
+author: PTK-KienPham
+version: 2.0
+main: PTK\Info\Main
+api: 2.0.0
+commands:
+ muavip:
+    description: Giá của vip
+    usage: "Sử dụng: /muavip"
+    permission: info.command.muavip
+ luat:
+    description: Luật của server
+    usage: "Sử dụng: /luat"
+    permission: info.command.luat
+ giapoint:
+    description: Giá của xu
+    usage: "Sử dụng: /giapoint"
+    permission: info.command.giacoin
+ helps:
+    description: Xem cach choi
+    usage: "Sử dụng: /helps"
+    permission: info.command.helps
+ giapoint:
+    description: Giá của xu
+    usage: "Sử dụng: /giapoint"
+    permission: info.command.giacoin
+ giadoixu:
+    description: Giá doi xu
+    usage: "Sử dụng: /giadoixu"
+    permission: info.command.giadoixu
+ thongbao:
+    description: Thông Bao
+    usage: "Sử dụng: /thongbao"
+    permission: info.command.thongbao
+ lag:
+    description: Cách Giảm Lag
+    usage: "Sử dụng: /lag"
+    permission: info.command.lag
+ info:
+    description: Thông Tin
+    usage: "Sử dụng: /info"
+    permission: info.command.info
+ allsv:
+    description: All sv
+    usage: "Sử dụng: /allsv"
+    permission: info.command.allsv
+permissions:
+  info.command.thongbao:
+    default: true
+  info.command.allsv:
+    default: true
+  info.command.lag:
+    default: true
+  info.command.helps:
+    default: true
+  info.command.luat:
+    default: true
+  info.command.muavip:
+    default: true
+  info.command.giapoint:
+    default: true
+  info.command.giadoixu:
+    default: true
+  info.command.info:
+    default: true

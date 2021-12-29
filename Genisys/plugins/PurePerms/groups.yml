@@ -1,0 +1,312 @@
+---
+Guest:
+  alias: ""
+  isDefault: true
+  inheritance: []
+  permissions:
+  - battlekits.listkits
+  - battlekits.use
+  - enes5519.servertransfer.komut
+  - f.command.del
+  - pocketmine.command.transfer
+  - tool.feed
+  - tool.sign.use.warp
+  - tool.warp
+  - tool.warp.use
+  - tool.warps.Jump
+  - tool.warps.Shop
+  - tool.warps.buyec
+  - tool.warps.parkour
+  - tool.warps.plot
+  - tool.warps.pvp
+  - tool.warps.shop
+  worlds:
+    Hub:
+      isDefault: true
+      permissions: []
+    Sur1:
+      isDefault: true
+      permissions: []
+Owner:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - enes5519.servertransfer.komut
+  - pocketmine.command.op
+  - pocketmine.command.time
+  - taptodo.command
+  - taptodo.command.add
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Trùm:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions: ~
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Builder:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - enes5519.servertransfer.komut
+  - pocketmine.command.gamemode
+  - pocketmine.command.give
+  - pocketmine.command.kick
+  - pocketmine.command.teleport
+  - pocketmine.command.time
+  - pocketmine.command.transfer
+  - tool.feed
+  - tool.gamemode
+  - tool.warps.plot
+  - tool.warps.pvp
+  - tool.warps.shop
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Helper:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guild
+  permissions:
+  - pocketmine.command.ban
+  - pocketmine.command.kick
+  - pocketmine.command.teleport
+  - pocketmine.commmand.transfer
+  - tool.feed
+  - tool.fly
+  - tool.fly.use
+  - tool.warps.Shop
+  - tool.warps.buyec
+  - tool.warps.parkour
+  - tool.warps.plot
+  - tool.warps.pvp
+  - tool.warps.shop
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Youtuber:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - enes5519.servertransfer.komut
+  - pocketmine.command.teleport
+  - tool.feed
+  - tool.fly
+  - tool.fly.use
+  - tool.warps.Jump
+  - tool.warps.pvp
+  - tool.warps.shop
+  worlds:
+    Plot:
+      isDefault: false
+      permissions:
+      - tool.fly
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Police:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - essential.warp.use
+  - essential.warps.pvp
+  - pocketmine.command.ban
+  - pocketmine.command.kick
+  - pocketmine.command.teleport
+  - pocketmine.command.transfer
+  - tool.feed
+  - tool.fly
+  - tool.gamemode
+  - tool.mute
+  - tool.warp.use
+  - tool.warps.Jump
+  - tool.warps.buyec
+  - tool.warps.parkour
+  - tool.warps.pvp
+  - tool.warps.shop
+  worlds:
+    Plot:
+      isDefault: false
+      permissions: ~
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Admin:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - '%pocketmine.command.enchant.usage'
+  - enes5519.servertransfer.komut
+  - pocketmine.command.ban
+  - pocketmine.command.enchant.usage
+  - pocketmine.command.gamemode
+  - tool.fly
+  - tool.warps.Shop
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+CoOwner:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions: []
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+Co-OP:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - enes5519.servertransfer.komut
+  - pocketmine.command.ban
+  - pocketmine.command.gamemode
+  - pocketmine.command.kick
+  - pocketmine.command.teleport
+  - tool.mute
+  - tool.warps.Shop
+  worlds:
+    Hub:
+      isDefault: false
+      permissions: []
+    Sur1:
+      isDefault: false
+      permissions: []
+1:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - tool.feed
+  - tool.feed.use
+  - tool.fly.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+2:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - pocketmine.command.teleport
+  - tool.feed
+  - tool.feed.use
+  - tool.fly
+  - tool.fly.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+3:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - pocketmine.command.teleport
+  - tool.feed.use
+  - tool.fly
+  - tool.fly.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+4:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - pocketmine.command.teleport
+  - steakit.steak
+  - tool.feed
+  - tool.feed.use
+  - tool.fly
+  - tool.fly.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+5:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - pocketmine.command.teleport
+  - tool.feed
+  - tool.feed.use
+  - tool.fly
+  - tool.fly.use
+  - tool.god.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+6:
+  alias: ""
+  isDefault: false
+  inheritance:
+  - Guest
+  permissions:
+  - pocketmine.command.teleport
+  - speed.use
+  - tool.feed
+  - tool.feed.use
+  - tool.fly
+  - tool.fly.use
+  - tool.god.use
+  - tool.heal.use
+  - tool.jump
+  - vip1b.area.vip
+  worlds: []
+PMem:
+  alias: ""
+  isDefault: false
+  inheritance: []
+  permissions:
+  - tool.fly.use
+  worlds: []
+...

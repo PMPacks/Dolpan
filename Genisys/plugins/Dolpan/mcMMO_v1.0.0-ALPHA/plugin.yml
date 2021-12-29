@@ -1,0 +1,6 @@
+name: mcMMO
+main: MCMMO\MCMMO
+version: 1.0.0-ALPHA
+api: [1.0.0, 2.0.0, 3.0.0-ALPHA1]
+author: ImagicalGamer
+load: POSTWORLD

@@ -1,0 +1,29 @@
+---
+all:
+ "17:0:break": 10
+ "17:1:break": 10
+ "17:2:break": 10
+ "18:0:break": 10
+ "18:1:break": 10
+ "18:2:break": 10
+ "1:0:break": 10
+ "4:0:break": 5
+ "14:0:break": 20
+ "15:0:break": 40
+ "16:0:break": 15
+ "21:0:break": 25
+ "56:0:break": 50
+ "73:0:break": 35
+ "87:0:break": 10
+ "88:0:break": 10
+ "89:0:break": 15
+ "153:0:break": 30
+ "129:0:break": 60
+ "44:0:break": 15
+ "12:0:break": 5
+ "1:1:break": 10
+ "1:3:break": 10
+ "1:5:break": 10
+ "6:0:place": 5
+ "6:1:place": 5
+ "6:2:place": 5

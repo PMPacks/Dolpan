@@ -1,0 +1,5 @@
+name: CONSOLEChat
+author: TheNewHEROBRINE
+version: 1.0.0
+api: 2.0.0
+main: TheNewHEROBRINE\CONSOLEChat\Main

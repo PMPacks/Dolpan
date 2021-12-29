@@ -1,0 +1,104 @@
+Genisys Crash Dump Wed Sep 27 15:54:57 +06 2017
+
+Error: Non-abstract method aliuly\grabbag\common\selectors\BaseSelector::select() must contain body
+File: /plugins/GrabBag.phar/src/aliuly/grabbag/common/selectors/BaseSelector
+Line: 14
+Type: E_COMPILE_ERROR
+
+THIS CRASH WAS CAUSED BY A PLUGIN
+此次出错由插件引起
+BAD PLUGIN : GrabBag v2.3.0
+
+Code:
+[5] use pocketmine\Server;
+[6] 
+[7] /**
+[8]  * Base class for command selectors
+[9]  */
+[10] abstract class BaseSelector {
+[11]   /**
+[12]    * Main entry point for command selectors
+[13]    */
+[14]   static public function select(Server $srv, CommandSender $sender, array $args);
+[15]   /**
+[16]    * Implement selectors like m, name, etc...
+[17]    */
+[18]   static public function checkSelectors(array $args,CommandSender $sender, Entity $item) {
+[19]     foreach($args as $name => $value){
+[20]       switch($name){
+[21]         case "m":
+[22]           $mode = intval($value);
+[23]           if($mode === -1) break;
+[24]           // what is the point of adding this (in PC) when they can just safely leave this out?
+
+Backtrace:
+#0 (): pocketmine\Server->crashDump(boolean)
+
+Genisys version: 1.1 #0 [Protocol 70; API 2.0.0]
+uname -a: Windows NT WIN-HQ53TBM33EP 6.1 build 7601 (Windows Server 2008 R2 Enterprise Edition Service Pack 1) AMD64
+PHP version: 7.0.18
+Zend version: 3.0.0
+OS : WINNT, win
+
+Loaded plugins:
+加载的插件:
+AdminFun 1.0.0 by hoyinm14mc for API(s) 1.12.0, 1.13.0, 2.0.0
+AntiServerStop 1.1 by paetti for API(s) 1.0.0, 2.0.0, 3.0.0, 3.0.1, 3.1.0, 3.0.0-ALPHA1, 4.0.0, 5.0.0, 3.0.0-ALPHA6
+Broadcaster 1.16 by EvolSoft for API(s) 1.12.0
+CalculatorPE 1.0.0 by Vaivez66 for API(s) 1.12.0
+CmdSnooper 1.2.0 by HotshotHD & CodeRed2019 for API(s) 1.13.0, 2.0.0, 3.0.0, 3.0.0-ALPHA5
+EasierTime 1.2 by Ad5001 for API(s) 2.0.0
+EconomyAPI 2.0.9 by onebone for API(s) 2.0.0
+NetherChests 1.1.1 by aliuly for API(s) 1.12.0
+InventorySize 1 by MaxFreeze for API(s) 2.0.0
+iProtector 3.1b by LDX for API(s) 1.9.0, 3.0.0-ALPHA7
+ItemCasePE 1.0.8 by aliuly for API(s) 1.10.0, 1.13.0
+KillChat 1.0.2.MOD by Array for API(s) 1.9.0, 2.0.0
+MagicWE 0.2.6 by thebigsmileXD for API(s) 1.13.0, 2.0.0, 3.0.0-ALPHA6
+SignEnchant 1.1.1 by FRONGKY for API(s) 1.0.0, 1.1.0, 1.2.0, 1.2.1, 3.0.0-ALPHA6, 3.0.0-ALPHA5, 3.0.0-ALPHA4, 2.0.0
+SignModifier 1.0.0 by wolfdale for API(s) 1.3.1
+SimpleAuth 1.8.1 by PocketMine Team, shoghicp, awzaw for API(s) 2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5
+SimpleAuthHelper 2.0.1 by aliuly for API(s) 1.12.0
+Slapper 2.1_PHP7 by EradiCube for API(s) 1.14.0
+WorldProtect 2.2.0 by aliuly for API(s) 1.10.0, 1.12.0, 3.0.0-ALPHA6
+AutoInv[PTK] 1.0.0 by PTK-KienPham for API(s) 1.0.0, 2.0.0
+Bar 0.1v_beta by PTK-KienPham for API(s) 1.0.0, 2.0.0, 2.1.0, 3.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2
+BuyEc[PTK] 3 by  for API(s) 2.0.0, 3.0.0
+ChatToolsPro 1.2 by paetti for API(s) 1.0.0, 2.0.0, 3.0.0, 3.0.0-ALPHA, 3.0.0-ALPHA1, 4.0.0, 5.0.0
+CommandBlocker 1.5.5 by Thunder33345 for API(s) 2.0.0
+CONSOLEChat 1.0.0 by TheNewHEROBRINE for API(s) 2.0.0
+CustomAlerts 1.6 by EvolSoft for API(s) 1.12.0
+Dial[PTK] 0.3.1 by PTK-KienPham for API(s) 2.0.0
+DonRac[PTK] 2 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+EconomyJob 2.0.4 by KienPham for API(s) 1.0.0, 2.0.0
+Feed[PTK] 1 by  for API(s) 2.0.0
+FlyText[PTK] 1 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+FactionsPro 1.0 rewrite by PTK-KienPham by Array for API(s) 1.14.0, 2.0.0
+Idea_Aro 1 by PVHB for API(s) 2.0.0
+Info[PTK] 2 by PTK-KienPham for API(s) 2.0.0
+ItemCloud 1.1 by KienPham for API(s) 1.4.0, 2.0.0
+ManyWorlds 2.1.0 by aliuly for API(s) 2.0.0
+MineLevelSystem[PTK] 1 by PTK-KienPham for API(s) 1.0.0, 2.0.0, 3.0.0
+MineLevel 1 by PTK-KienPham for API(s) 2.0.0, 3.0.0, 3.0.0-ALPHA8
+MSpawns 1.5 by EvolSoft for API(s) 2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4
+NameCorrector 1.0.0#build011 by PEMapModder for API(s) 1.8.0, 2.0.0
+NapThe[PTK]-F 1 by  for API(s) 2.0.0, 3.0.0
+PlayerShop[PTK] 3.0 by PTK-KienPham for API(s) 1.12.0, 2.0.0
+PmChair 1.1 by maru for API(s) 1.12.0, 1.13.0, 2.0.0
+PurePerms 1.4.0 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+Rules_by_HeoGM_0.0.1# 1 by hg for API(s) 2.0.0
+SimpleEarth+ 1 by RousselCrft for API(s) 1.0.0, 1.1.0, 1.2.0, 1.2.1, 1.9.0, 1.10.0, 1.12.0, 1.13.0, 2.0.0, 2.1.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4, 3.0.5, 3.0.6, 3.0.7, 3.0.8, 3.0.9, 3.0.10 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5, 3.0.0-ALPHA6, 3.0.0-ALPHA7, 3.0.0-ALPHA8, 3.0.0-ALPHA9, 3.0.0-ALPHA10
+SlapperRotation 1.0.1 by jojoe77777 for API(s) 2.0.0, 2.1.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2
+SW_svile 0.7dev by svile for API(s) 2.0.0, 3.0.0, 3.0.0-ALPHA4
+TapToDo[PTK] 2.2.1 by PTK-KienPham for API(s) 1.0.0, 2.0.0, 3.0.0
+Tool[PTK] 2.0.0 by  for API(s) 2.1.0, 2.0.0
+Trade[PTK] 1 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+TransferServerTitle 1 by HoangKaito for API(s) 2.0.0, 3.0.0, 3.0.1, 3.0.0-ALPHA7
+VipDay[PTK] 1.0.0 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+EconomyLand 2.0.9 by onebone for API(s) 1.12.0
+EconomySell 2.0.7 by onebone for API(s) 1.12.0
+EconomyShop 2.0.7 by onebone for API(s) 1.12.0
+GrabBag 2.3.0 by aliuly for API(s) 1.10.0, 1.11.0, 1.12.0
+SkyBlock 2 by PTK for API(s) 2.0.0, 3.0.0, 3.0.0-ALPHA7
+PureChat 1.4.0 by 64FF00 for API(s) 1.13.0, 2.0.0
+SimpleWarp 3.3.0 by Falkirks for API(s) 2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5

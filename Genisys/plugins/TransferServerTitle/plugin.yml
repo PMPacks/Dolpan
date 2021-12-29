@@ -1,0 +1,14 @@
+name: TransferServerTitle
+version: 1
+api: [2.0.0, 3.0.0, 3.0.1, 3.0.0-ALPHA7]
+main: hoangkaito\Transfer\Main
+author: HoangKaito
+description: "Plugin By HoangKaito"
+commands:
+ transfer:
+  permission: transfer.command.transfer
+  usage: "/quaserver [player] <address> <port>"
+permissions:
+ transfer.command.transfer:
+  description: "Áp dụng cho player dịch chuyển qua server khác"
+  default: true

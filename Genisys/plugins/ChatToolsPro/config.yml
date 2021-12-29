@@ -1,0 +1,25 @@
+---
+prefix: "[ChatToolsPro]"
+spamtext: "SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM"
+autospamtext: "Haha you get autospammed! LOL!"
+# Leave joinmessage empty to disable e.g. ""
+joinmessage: "Welcome to the Server! We hope you enjoy your stay! Have fun!"
+twitter: "Twitter: @your_twitter_here"
+instagram: "Instagram: @your_instagram_here"
+kik: "Kik: @your_kik_here"
+youtube: "YouTube: youtube.com/c/paetti"
+owners: "OwnerName"
+coowners: "CoOwner, CoOwner"
+admins: "Admin, Admin"
+mods: "Mod, Mod"
+supporters: "Supporter, Supporter"
+# \n is for new line
+rules: "1. Do not grief\n
+2. Do not swear\n
+3. Do not hack"
+msg1: ""
+msg2: ""
+msg3: ""
+msg4: ""
+msg5: ""
+...

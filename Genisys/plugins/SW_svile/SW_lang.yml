@@ -1,0 +1,24 @@
+#To disable one of these just delete the message between ' ' , not the whole line
+#You can use " @ " to set colors and _EOL_ as EndOfLine
+#To disable one of these just delete the message between ' ' , not the whole line
+#You can use " @ " to set colors and _EOL_ as EndOfLine
+---
+banned.command.msg: '@b→@cYou can''t use this command here_EOL_@b→@cBạn không thể dùng lệnh này ở đây!!!'
+sign.game.full: '@b→@cThis game is full, please wait_EOL_@b→@cPhòng này đã đầy hãy chọn phòng khác!!!'
+sign.game.running: '@b→@cThe game is running, please wait_EOL_@b→Phòng này đang chạy hãy chọn phòng khác!!'
+game.join: '@b→@f{PLAYER} @ejoined the game @b{COUNT}_EOL_@b→@6Người chơi @9{PLAYER}@6 đã tham gia số người: @b{COUNT}'
+popup.countdown: '@b→@9Bắt đầu trong @f{N}'
+chat.countdown: '@b→@7The game starts in @b{N}_EOL_@b→@9Trò chơi sẽ bắt đầu trong @d{N}'
+game.start: '@b→@dThe game start now, good luck!_EOL_@b→@aTrò chơi đã bắt đầu, chúc bạn may mắn :)'
+no.pvp.countdown: '@bBạn Không Thể PVP Trong @f{COUNT} @bGIÂY NỮA!'
+game.chest.refill: '@b→@aChests has been refilled !_EOL_@b→@eTất cả các rương đã được reset'
+game.left: '@f→@7{PLAYER} left the game @b{COUNT}_EOL_@b→@6{PLAYER}@c đã thoát còn @3{COUNT}@e người chơi.'
+death.player: '@c→@f{PLAYER} @cwas killed by @f{KILLER} @b{COUNT}_EOL_@b→@6{PLAYER}@c đã bị giết bởi @6{KILLER}@e còn @3{COUNT} người chơi'
+death.arrow: '@c→@f{PLAYER} @cwas killed by @f{KILLER} @b{COUNT}_EOL_@b→@6{PLAYER}@c đã bị giết bởi @6{KILLER}@c dùng cung@e còn @3{COUNT} người chơi'
+death.void: '@c→@f{PLAYER} @cwas killed by @fVOID @b{COUNT}_EOL_@b→@6{PLAYER}@c đã bị dơi xuống khoảng không@e còn @3{COUNT} người chơi'
+death.lava: '@c→@f{PLAYER} @cwas killed by @fLAVA @b{COUNT}_EOL_@b→@6{PLAYER}@c đã liếm thử dung nham@e còn @3{COUNT} người chơi'
+death.spectator: '@f→@bYou are now a spectator!_EOL_@f→@bType @f/sw quit @bto exit
+  from the game_EOL_@b→@aBạn đang ở chế độ khán giả_EOL_@f→@bHãy ghi /sw quit để về Hub'
+server.broadcast.winner: '@0→@f{PLAYER} @bwon the game on SW: @f{SWNAME}_EOL_@b→@aNgười chơi @b{PLAYER}@a đã thắng trong phòng @6{SWNAME}'
+winner.reward.msg: '@f→@bYou won @f{VALUE}Xu,@7Your money: @f{MONEY}Xu_EOL_@f→@bBạn Đã Thắng @f{VALUE}Xu,@7Tiền Của Bạn: @f{MONEY}'
+...

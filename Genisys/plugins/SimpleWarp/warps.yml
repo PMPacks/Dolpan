@@ -1,0 +1,44 @@
+---
+Pvp:
+  x: 876.385600
+  "y": 70.000000
+  z: -218.525300
+  level: Pvp
+  public: true
+  metadata: []
+acid:
+  x: 90.000000
+  "y": 66.000000
+  z: 90.000000
+  level: AcidIsland
+  public: true
+  metadata: []
+Shop:
+  x: 119.462000
+  "y": 6.000000
+  z: 155.330700
+  level: Shop
+  public: true
+  metadata: []
+sb:
+  x: -845.287354
+  "y": 70.001232
+  z: -844.443481
+  level: sb
+  public: true
+  metadata: []
+mayfarm:
+  x: -843.182129
+  "y": 69.000003
+  z: -832.743408
+  level: sb
+  public: true
+  metadata: []
+sw:
+  x: 127.597076
+  "y": 5.000000
+  z: 128.617920
+  level: sw
+  public: true
+  metadata: []
+...

@@ -1,0 +1,64 @@
+---
+version: 1.4.0-BETA-04
+default-factions-plugin: FactionsPro
+enable-multiworld-chat: false
+groups:
+  Guest:
+    chat: §6[§f{fac_name}§6] §e•»§fMember§e«• §3{display_name} §b» §f{msg}
+    nametag: §6[§f{fac_name}§6] §e•»§fMember§e«• §3{display_name}
+    worlds: []
+  Admin:
+    nametag: §6[§f{fac_name}§6] §e۩§6…§r§dΛ§cɖ§aɱ§eɨ§bɲ§l§6…§e۩  §r§l§c{display_name}
+    chat: §b•§6[§f{fac_name}§6] §e۩§6…§r§dΛ§cɖ§aɱ§eɨ§bɲ§l§6…§e۩  §r§l§c{display_name}
+      §r§d⊹⊱✿ §c{msg} §r§d✿
+  Owner:
+    chat: §b•§6[§f{fac_name}§6] §b♫§d…§e★§aØwner§e★§d…§b♫ §c{display_name} §f§l⇨§r
+      §3{msg} §f§l⇦
+    nametag: §6[§f{fac_name}§6] §e»…§cᄉ§7→§cØwner§7←§cᄉ§e…§e« §b{display_name}
+    worlds: []
+  Trùm:
+    chat: §b•§6[§f{fac_name}§6] §e♠§a...§c❤§bŦřùm§c❤§a...§e♠ §b✘{display_name}✘§r §e⇨ §a{msg}
+      §e⇦
+    nametag: §6[§f{fac_name}§6] §e»…§cᄉ§7→§cBoss§7←§cᄉ§e…§e« §b{display_name}
+  Helper:
+    chat: §b•§6[§f{fac_name}§6] §d✿§c...§aĦełper§c...§d✿§6» §r{display_name} §6«§a♫§e⇛
+      §3{msg} §e⇚
+    nametag: §6[§f{fac_name}§6] §e»§6…§d「§7→§aĦełper§7←§d」§6…§e« §f{display_name}
+    worlds: []
+  Builder:
+    chat: §b•§6[§f{fac_name}§6] §c❖§a...§d❦§6ɮʊɨŁđɛɾ§d❦§a...§c❖ §b{display_name} §5⇥
+      §a{msg} §5⇤
+    nametag: §6[§f{fac_name}§6] §e»…§6♨§7→§6Builder§7←§6♨§e…§e« §f{display_name}
+  Police:
+    chat: §b•§6[§f{fac_name}§6] §c✇§6...§a❂§bΡølice§a❂§6...§c✇§f⇨§a§l{display_name}§r§e➟
+      §e{msg}
+    nametag: §6[§f{fac_name}§6] §e»§6…§9✪§7→§9₱olice§7←§9✪§6…§e« §f{display_name}
+  Youtuber:
+    chat: §b•§6[§f{fac_name}§6] §4•§e YӨЦƬЦBΣЯ§4• {display_name} §6√ §f{msg} §6√
+    nametag: §6[§f{fac_name}§6] §e»§6…§4❤§b♪§cYδμ§fṯüḇεr§b♪§4❤§6…§e« §f{display_name}
+  PMem:
+    chat: §b•§6[§f{fac_name}§6] §e»§a…§fƸ§7→§bṔrσ_ᙢember§7←§fƷ§a…§e« §f{display_name}
+      §e⇝ §f{msg} §e⇜
+    nametag: §6[§f{fac_name}§6] §e»§a…§fƸ§7→§bṔrσ_ᙢember§7←§7Ʒ§a…§e« §f{display_name}
+  1:
+    nametag: §6[§f{fac_name}§6] §7༒§4Đồng§7༒  §e↘§f{display_name}§e↙
+    chat: §b•§6[§f{fac_name}§6] §7༒§4Đồng§7༒  §e↘§f{display_name}§e↙ §1»§3{msg}§1«
+  2:
+    nametag: §6[§f{fac_name}§6] §a⊱..§fBạc§a..⊰ §e→§f{display_name}§e←
+    chat: §b•§6[§f{fac_name}§6] §a⊱..§fBạc§a..⊰ §e→§f{display_name}§e← §d››§3{msg}§d‹‹
+  3:
+    nametag: §6[§f{fac_name}§6] §b♛..§6Vàng§b..♛ §e✯§f{display_name}§e✯
+    chat: §b•§6[§f{fac_name}§6] §b♛..§6Vàng§b..♛ §e✯§f{display_name}§e✯ §7√§3{msg}§7√
+  4:
+    nametag: §6[§f{fac_name}§6] §9☤..§fBạch§e☿§bKim§9..☤ §5♣§f{display_name}§5♣
+    chat: §b•§6[§f{fac_name}§6] §9☤..§fBạch§e☿§bKim§9..☤ §5♣§f{display_name}§5♣ §8~§3{msg}§8~
+  5:
+    nametag: §6[§f{fac_name}§6] §e☫..§bKim§9☬§bCương§e..☫ §6♦§f{display_name}§6♦
+    chat: §b•§6[§f{fac_name}§6] §e☫..§bKim§9☬§bCương§e..☫ §6♦§f{display_name}§6♦ §1∆§3{msg}§1∆
+  6:
+    nametag: §6[§f{fac_name}§6] §2༒..§6Cao§d❂§eThủ§2..༒  §c♥§f{display_name}§c♥
+    chat: §b•§6[§f{fac_name}§6] §2༒..§6Cao§d❂§eThủ§2..༒  §c♥§f{display_name}§c♥ §9♪§3{msg}§9♪
+  Co-OP:
+    nametag: '&8&l[Co-OP]&f&r {display_name}'
+    chat: '&8&l[Co-OP]&f&r {display_name} &7> {msg}'
+...

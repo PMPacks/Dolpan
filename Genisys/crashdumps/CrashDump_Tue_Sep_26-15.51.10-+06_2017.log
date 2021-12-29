@@ -1,0 +1,84 @@
+Genisys Crash Dump Tue Sep 26 15:51:10 +06 2017
+
+Error: syntax error, unexpected '}', expecting end of file
+File: /plugins/MineLevel[PTK]-F/src/PTK/MineLevel/Main
+Line: 324
+Type: notice
+
+THIS CRASH WAS CAUSED BY A PLUGIN
+此次出错由插件引起
+
+Code:
+[315] 			$sender->sendMessage("§8--------------------");
+[316] 			}
+[317] 			break;
+[318] 			return true;
+[319] 			break;
+[320] 	}
+[321] 	return false;
+[322] }
+[323] }
+[324] }
+[325] 
+[326] 
+[327] 
+[328] 
+[329] 
+[330] 
+[331] 
+[332] 
+[333] 
+[334] 
+
+Backtrace:
+#0 (): spl_autoload_call(string PTK\MineLevel\Main)
+#1 /src/pocketmine/plugin/FolderPluginLoader(48): class_exists(string PTK\MineLevel\Main, boolean 1)
+#2 /src/pocketmine/plugin/PluginManager(155): pocketmine\plugin\FolderPluginLoader->loadPlugin(string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\plugins\MineLevel[PTK]-F)
+#3 /src/pocketmine/plugin/PluginManager(333): pocketmine\plugin\PluginManager->loadPlugin(string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\plugins\MineLevel[PTK]-F, array Array())
+#4 /src/pocketmine/Server(1977): pocketmine\plugin\PluginManager->loadPlugins(string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\plugins\)
+#5 /src/pocketmine/PocketMine(467): pocketmine\Server->__construct(pocketmine\CompatibleClassLoader object, pocketmine\utils\MainLogger object, string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\, string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\, string C:\Users\Dcms.WIN-HQ53TBM33EP\Downloads\SB\plugins\, string unknown)
+
+Genisys version: 1.1 #0 [Protocol 70; API 2.0.0]
+uname -a: Windows NT WIN-HQ53TBM33EP 6.1 build 7601 (Windows Server 2008 R2 Enterprise Edition Service Pack 1) AMD64
+PHP version: 7.0.18
+Zend version: 3.0.0
+OS : WINNT, win
+
+Loaded plugins:
+加载的插件:
+AdminFun 1.0.0 by hoyinm14mc for API(s) 1.12.0, 1.13.0, 2.0.0
+AntiServerStop 1.1 by paetti for API(s) 1.0.0, 2.0.0, 3.0.0, 3.0.1, 3.1.0, 3.0.0-ALPHA1, 4.0.0, 5.0.0, 3.0.0-ALPHA6
+Broadcaster 1.16 by EvolSoft for API(s) 1.12.0
+CalculatorPE 1.0.0 by Vaivez66 for API(s) 1.12.0
+CmdSnooper 1.2.0 by HotshotHD & CodeRed2019 for API(s) 1.13.0, 2.0.0, 3.0.0, 3.0.0-ALPHA5
+EasierTime 1.2 by Ad5001 for API(s) 2.0.0
+EconomyAPI 2.0.9 by onebone for API(s) 2.0.0
+NetherChests 1.1.1 by aliuly for API(s) 1.12.0
+InventorySize 1 by MaxFreeze for API(s) 2.0.0
+iProtector 3.1b by LDX for API(s) 1.9.0, 3.0.0-ALPHA7
+ItemCasePE 1.0.8 by aliuly for API(s) 1.10.0, 1.13.0
+KillChat 1.0.2.MOD by Array for API(s) 1.9.0, 2.0.0
+MagicWE 0.2.6 by thebigsmileXD for API(s) 1.13.0, 2.0.0, 3.0.0-ALPHA6
+SignEnchant 1.1.1 by FRONGKY for API(s) 1.0.0, 1.1.0, 1.2.0, 1.2.1, 3.0.0-ALPHA6, 3.0.0-ALPHA5, 3.0.0-ALPHA4, 2.0.0
+SignModifier 1.0.0 by wolfdale for API(s) 1.3.1
+SimpleAuth 1.8.1 by PocketMine Team, shoghicp, awzaw for API(s) 2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5
+SimpleAuthHelper 2.0.1 by aliuly for API(s) 1.12.0
+Slapper 2.1_PHP7 by EradiCube for API(s) 1.14.0
+WorldProtect 2.2.0 by aliuly for API(s) 1.10.0, 1.12.0, 3.0.0-ALPHA6
+AutoInv[PTK] 1.0.0 by PTK-KienPham for API(s) 1.0.0, 2.0.0
+Bar 0.1v_beta by PTK-KienPham for API(s) 1.0.0, 2.0.0, 2.1.0, 3.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2
+BuyEc[PTK] 3 by  for API(s) 2.0.0, 3.0.0
+ChatToolsPro 1.2 by paetti for API(s) 1.0.0, 2.0.0, 3.0.0, 3.0.0-ALPHA, 3.0.0-ALPHA1, 4.0.0, 5.0.0
+CommandBlocker 1.5.5 by Thunder33345 for API(s) 2.0.0
+CONSOLEChat 1.0.0 by TheNewHEROBRINE for API(s) 2.0.0
+CustomAlerts 1.6 by EvolSoft for API(s) 1.12.0
+Dial[PTK] 0.3.1 by PTK-KienPham for API(s) 2.0.0
+DonRac[PTK] 2 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+EconomyJob 2.0.4 by KienPham for API(s) 1.0.0, 2.0.0
+Feed[PTK] 1 by  for API(s) 2.0.0
+FlyText[PTK] 1 by PTK-KienPham for API(s) 2.0.0, 3.0.0
+FactionsPro 1.0 rewrite by PTK-KienPham by Array for API(s) 1.14.0, 2.0.0
+Idea_Aro 1 by PVHB for API(s) 2.0.0
+Info[PTK] 2 by PTK-KienPham for API(s) 2.0.0
+ItemCloud 1.1 by KienPham for API(s) 1.4.0, 2.0.0
+ManyWorlds 2.1.0 by aliuly for API(s) 2.0.0

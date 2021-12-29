@@ -1,0 +1,81 @@
+---
+name: Skywar3
+slot: 12
+world: "03"
+countdown: 12
+maxGameTime: 500
+void_Y: 74
+spawns:
+  1:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  2:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  3:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  4:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  5:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  6:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  7:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  8:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  9:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  10:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  11:
+    x: n.a
+    "y": n.a
+    z: n.a
+    yaw: n.a
+    pitch: n.a
+  12:
+    x: -19.000000
+    "y": 87.000000
+    z: 28.000000
+    yaw: 298
+    pitch: 58
+...

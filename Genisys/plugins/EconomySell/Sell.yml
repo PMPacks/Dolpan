@@ -1,0 +1,262 @@
+---
+11:2:85:Shop:
+  x: 11
+  "y": 2
+  z: 85
+  level: Shop
+  cost: 8000
+  item: 44
+  itemName: Stone Slab
+  meta: 0
+  amount: 64
+13:2:85:Shop:
+  x: 13
+  "y": 2
+  z: 85
+  level: Shop
+  cost: 4500
+  item: 89
+  itemName: Glowstone
+  meta: 0
+  amount: 64
+15:2:84:Shop:
+  x: 15
+  "y": 2
+  z: 84
+  level: Shop
+  cost: 7000
+  item: 103
+  itemName: Melon Block
+  meta: 0
+  amount: 16
+14:2:85:Shop:
+  x: 14
+  "y": 2
+  z: 85
+  level: Shop
+  cost: 7000
+  item: 103
+  itemName: Melon Block
+  meta: 0
+  amount: 86
+24:2:75:Shop:
+  x: 24
+  "y": 2
+  z: 75
+  level: Shop
+  cost: 7000
+  item: 391
+  itemName: Carrot
+  meta: 0
+  amount: 32
+24:2:76:Shop:
+  x: 24
+  "y": 2
+  z: 76
+  level: Shop
+  cost: 7000
+  item: 392
+  itemName: Potato
+  meta: 0
+  amount: 32
+7:2:84:Shop:
+  x: 7
+  "y": 2
+  z: 84
+  level: Shop
+  cost: 4000
+  item: 4
+  itemName: Cobblestone
+  meta: 0
+  amount: 32
+96:6:184:Shop:
+  x: 96
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 17
+  itemName: Oak Wood
+  meta: 0
+  amount: 32
+93:6:184:Shop:
+  x: 93
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 17
+  itemName: Spruce Wood
+  meta: 1
+  amount: 32
+90:6:184:Shop:
+  x: 90
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 17
+  itemName: Birch Wood
+  meta: 2
+  amount: 32
+87:6:178:Shop:
+  x: 87
+  "y": 6
+  z: 178
+  level: Shop
+  cost: 200
+  item: 162
+  itemName: Acacia Wood
+  meta: 0
+  amount: 32
+87:6:184:Shop:
+  x: 87
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 17
+  itemName: Jungle Wood
+  meta: 3
+  amount: 32
+90:6:178:Shop:
+  x: 90
+  "y": 6
+  z: 178
+  level: Shop
+  cost: 200
+  item: 162
+  itemName: Dark Oak Wood
+  meta: 1
+  amount: 32
+117:6:132:Shop:
+  x: 117
+  "y": 6
+  z: 132
+  level: Shop
+  cost: 15
+  item: 6
+  itemName: Oak Sapling
+  meta: 0
+  amount: 5
+114:6:132:Shop:
+  x: 114
+  "y": 6
+  z: 132
+  level: Shop
+  cost: 20
+  item: 6
+  itemName: Oak Sapling
+  meta: 0
+  amount: 1
+111:6:132:Shop:
+  x: 111
+  "y": 6
+  z: 132
+  level: Shop
+  cost: 25
+  item: 6
+  itemName: Birch Sapling
+  meta: 2
+  amount: 5
+117:6:184:Shop:
+  x: 117
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 1000
+  item: 57
+  itemName: Diamond Block
+  meta: 0
+  amount: 20
+114:6:184:Shop:
+  x: 114
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 1200
+  item: 133
+  itemName: Emerald Block
+  meta: 0
+  amount: 20
+111:6:184:Shop:
+  x: 111
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 22
+  itemName: Lapis Lazuli Block
+  meta: 0
+  amount: 10
+108:6:184:Shop:
+  x: 108
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 42
+  itemName: Iron Block
+  meta: 0
+  amount: 10
+105:6:184:Shop:
+  x: 105
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 300
+  item: 41
+  itemName: Gold Block
+  meta: 0
+  amount: 5
+99:6:184:Shop:
+  x: 99
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 173
+  itemName: Coal Block
+  meta: 0
+  amount: 10
+102:6:184:Shop:
+  x: 102
+  "y": 6
+  z: 184
+  level: Shop
+  cost: 200
+  item: 152
+  itemName: Block of Redstone
+  meta: 0
+  amount: 20
+-856:70:-844:sb:
+  x: -856
+  "y": 70
+  z: -844
+  level: sb
+  cost: 2000
+  item: 42
+  itemName: Iron Block
+  meta: 0
+  amount: 64
+-856:70:-845:sb:
+  x: -856
+  "y": 70
+  z: -845
+  level: sb
+  cost: 5000
+  item: 42
+  itemName: Iron Block
+  meta: 0
+  amount: 64
+93:70:-117:sb:
+  x: 93
+  "y": 70
+  z: -117
+  level: sb
+  cost: 1000
+  item: 17
+  itemName: Oak Wood
+  meta: 0
+  amount: 32
+...

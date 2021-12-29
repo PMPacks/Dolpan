@@ -1,0 +1,102 @@
+name: CmdSnooper
+main: cmdsnooper\CmdSnooper
+version: 1.2.0
+api: [1.13.0, 2.0.0, 3.0.0, 3.0.0-ALPHA5]
+author: HotshotHD & CodeRed2019
+description: Spy on players to see what commands are being ran
+
+commands:
+  snoop:
+    description: Enter snoop mode
+permissions:
+   snoop.command:
+    default: op
+ 
+<?php
+
+namespace cmdsnooper;
+
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\Player;
+
+class CmdSnooper extends PluginBase {
+	public $snoopers = [];
+	
+	public function onEnable() {
+		@mkdir($this->getDataFolder());
+		$this->getLogger()->info("Enabled! Ready to snoop >:D");
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+		$this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML, array(
+	  	"Console.Logger" => "true",
+  		));
+	}
+	
+	 public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {			
+		if(strtolower($cmd->getName()) == "snoop") {
+		 	if($sender instanceof Player) {
+				if($sender->hasPermission("snoop.command")) {
+					if(!isset($this->snoopers[$sender->getName()])) {
+						$sender->sendMessage("§7Snoop> §fYou have entered snoop mode");
+						$this->snoopers[$sender->getName()] = $sender;
+						return true;
+					} else {
+						$sender->sendMessage("§7Snoop> §fYou have left snoop mode");
+						unset($this->snoopers[$sender->getName()]);
+						return true;
+					}
+				}
+			}
+		}
+	}
+ }
+<?php
+
+namespace cmdsnooper;
+
+use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use cmdsnooper\CmdSnooper;
+
+class EventListener implements Listener {
+	public $plugin;
+	
+	public function __construct(CmdSnooper $plugin) {
+		$this->plugin = $plugin;
+	}
+
+	public function getPlugin() {
+		return $this->plugin;
+	}
+	
+	public function onPlayerCmd(PlayerCommandPreprocessEvent $event) {
+		$sender = $event->getPlayer();
+		$msg = $event->getMessage();
+		
+		if($this->getPlugin()->cfg->get("Console.Logger") == "true") {
+			if($msg[0] == "/") {
+				if(stripos($msg, "login") || stripos($msg, "log") || stripos($msg, "reg") || stripos($msg, "register")) {
+					$this->getPlugin()->getLogger()->info($sender->getName() . "> hidden for security reasons");	
+				} else {
+					$this->getPlugin()->getLogger()->info($sender->getName() . "> " . $msg);
+				}
+				
+			}
+		}
+			
+			if(!empty($this->getPlugin()->snoopers)) {
+				foreach($this->getPlugin()->snoopers as $snooper) {
+					 if($msg[0] == "/") {
+						if(stripos($msg, "login") || stripos($msg, "log") || stripos($msg, "reg") || stripos($msg, "register")) {
+							$snooper->sendMessage($sender->getName() . "> hidden for security reasons");	
+						} else {
+							$snooper->sendMessage($sender->getName() . "> " . $msg);
+						}
+						
+					}
+	     			}		
+     			}
+   		}
+	}

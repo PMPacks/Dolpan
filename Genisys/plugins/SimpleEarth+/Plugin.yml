@@ -1,0 +1,46 @@
+name: SimpleEarth+
+main: Roussel\Crft\Main
+version: 1.0
+api:  [1.0.0, 1.1.0, 1.2.0, 1.2.1, 1.9.0, 1.10.0, 1.12.0, 1.13.0, 2.0.0, 2.1.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4, 3.0.5, 3.0.6, 3.0.7, 3.0.8, 3.0.9, 3.0.10 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5, 3.0.0-ALPHA6, 3.0.0-ALPHA7, 3.0.0-ALPHA8, 3.0.0-ALPHA9, 3.0.0-ALPHA10]
+author: RousselCrft 
+description: Build fast with this plugin :)
+commands:
+  helpseplus:
+   description: "Create a King Forest World"
+   permission: help.worldplus.cmd
+   usage: "/helpseplus"
+  createforest:
+   description: "Create a King Forest World"
+   permission: wpcforest.worldplus.cmd
+   usage: "/createforest"
+  createsea:
+   description: "Create a Wild Sea World"
+   usage: "/createsea"
+   permission: wpcsea.worldplus.cmd
+  goto:
+   description: "Teleport to another Worlds"
+   usage: "/goto"
+   permission: wptp.worldplus.cmd
+  portal:
+    description: "Create a portal to another World and..."
+    usage: "/portal"
+    permission: wpportal.worldplus.cmd
+permissions:
+  wpcforest.worldplus.cmd:
+    default: op
+    description: "Permission for create a King Forest World"
+  wpcsea.worldplus.cmd:
+    default: op
+    description: "Permission for create a wild sea world"
+  wptp.worldplus.cmd:
+    default: op
+    description: "Permission for travel yo another world"
+  wpportal.worldplus.cmd:
+    default: op
+    description: "Permission for spawn a portal"
+  breakportal.worldplus.cmd:
+    default: op
+    description: "Permission for break portal"
+  all.worldplus.admin:
+    default: op
+    description: "All permission for WorldPlus"

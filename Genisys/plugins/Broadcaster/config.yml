@@ -1,0 +1,20 @@
+---
+prefix: "Dolpan"
+suffix: ""
+time: 80
+sendmessage-format: "&b-=-=[{PREFIX}]=-=- {SUFFIX} &a{SENbER}&e>&f {MESSAGE}"
+datetime-format: "H:i:s"
+broabcast-enabled: true
+messages:
+ - "&b-=[{PREFIX}]=-&f §e•Ghi ./sb auto để tìm đảo còn trống"
+ - "&c-=[{PREFIX}]=-&f §eGhi ./buyec để mua enchant!!"
+ - "&b-=[{PREFIX}]=-&f §eGhi /listec để được xem danh sách enchant!"
+popup-time: 150
+popup-duration: 5
+senbpopup-format: "&a{SENbER}&e>>&f {MESSAGE}"
+popup-broabcast-enabled: false
+popups:
+ - "&aHope you enjoy school"
+ - "&bTry Skyblock now!"
+ - "&bTry PvP now!"
+...

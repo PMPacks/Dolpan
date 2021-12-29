@@ -1,0 +1,22 @@
+---
+version: 1
+blocks:
+- x: -25
+  "y": 41
+  z: 48
+  level: "02"
+  commands:
+  - af maxhealth 50
+- x: -26
+  "y": 42
+  z: 26
+  level: "02"
+  commands:
+  - af maxhealth 50
+- x: 42
+  "y": 76
+  z: 24
+  level: "01"
+  commands:
+  - af maxhealth 50
+...

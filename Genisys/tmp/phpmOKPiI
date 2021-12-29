@@ -1,0 +1,444 @@
+main: aliuly\nechest\Main
+api: 1.12.0
+load: POSTWORLD
+
+name: NetherChests
+description: An Ender Chest type plugin
+version: 1.1.1
+author: aliuly
+website: https://github.com/alejandroliu/pocketmine-plugins/tree/master/NetherChests
+
+permissions:
+<?php
+/**
+ ** CONFIG:config.yml
+ **/
+namespace aliuly\nechest;
+
+use pocketmine\plugin\PluginBase;
+use pocketmine\event\Listener;
+
+use pocketmine\utils\Config;
+use pocketmine\item\Item;
+use pocketmine\block\Block;
+use pocketmine\Player;
+use pocketmine\inventory\Inventory;
+use pocketmine\inventory\DoubleChestInventory;
+use pocketmine\inventory\ChestInventory;
+use pocketmine\tile\Tile;
+use pocketmine\tile\Chest;
+use pocketmine\math\Vector3;
+
+
+use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\inventory\InventoryCloseEvent;
+use pocketmine\event\inventory\InventoryOpenEvent;
+use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
+
+use aliuly\nechest\common\mc;
+
+// OPEN
+//- PlayerInteractEvent;
+//- InventoryOpenEvent;
+
+//PUT IN CHEST|GET FROM CHEST
+//- InventoryTransactionEvent;
+//- EntityInventoryChangeEvent;
+
+// CLOSE
+//- InventoryCloseEvent;
+
+
+//
+//use pocketmine\level\Level;
+//use pocketmine\event\entity\EntityLevelChangeEvent;
+//use pocketmine\block\Block;
+//use pocketmine\Server;
+//use pocketmine\utils\TextFormat;
+//use pocketmine\scheduler\CallbackTask;
+
+
+class Main extends PluginBase implements Listener {
+	protected $chests;	// Array with active chests
+	protected $base_block;
+	protected $dbm;
+
+	protected static function iName($player) {
+		return strtolower($player->getName());
+	}
+	protected static function chestId($obj) {
+		if ($obj instanceof ChestInventory) $obj = $obj->getHolder();
+		if ($obj instanceof Chest) $obj = $obj->getBlock();
+		return implode(":",[$obj->getLevel()->getName(),(int)$obj->getX(),(int)$obj->getY(),(int)$obj->getZ()]);
+	}
+
+	public function onDisable() {
+		if ($this->dbm !== null) $this->dbm->close();
+		$this->dbm = null;
+	}
+	public function onEnable(){
+		if (!is_dir($this->getDataFolder())) mkdir($this->getDataFolder());
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		$this->dbm = null;
+		if (!is_dir($this->getDataFolder())) mkdir($this->getDataFolder());
+		mc::plugin_init($this,$this->getFile());
+		$defaults = [
+			"version" => $this->getDescription()->getVersion(),
+			"# settings" => "Configuration settings",
+			"settings" => [
+				"# global" => "If true all worlds share the same NetherChest",
+				"global" => false,
+				"# particles" => "Decorate NetherChests...",
+				"particles" => true,
+				"# p-ticks" => "Particle ticks",
+				"p-ticks" => 20,
+				"# base-block" => "Block to use for the base",
+				"base-block" => "NETHERRACK",
+			],
+			"# backend" => "Use YamlMgr or MySqlMgr",
+			"backend" => "YamlMgr",
+			"# MySql" => "MySQL settings.", // Only used if backend is MySqlMgr to configure MySql settings
+			"MySql" => [
+				"host" => "localhost",
+				"user" => "nobody",
+				"password" => "secret",
+				"database" => "netherchestdb",
+				"port" => 3306,
+			],
+		];
+		$cf = (new Config($this->getDataFolder()."config.yml",
+										Config::YAML,$defaults))->getAll();
+		$backend = __NAMESPACE__."\\".$cf["backend"];
+		$this->dbm = new $backend($this,$cf);
+		$this->getLogger()->info(mc::_("Using %1% as backend",$cf["backend"]));
+
+		$bl = Item::fromString($cf["settings"]["base-block"]);
+		if ($bl->getBlock()->getId() == Item::AIR) {
+			$this->getLogger()->warning(mc::_("Invalid base-block %1%",$cf["settings"]["base-block"]));
+			$this->base_block = Block::NETHERRACK;
+		} else {
+			$this->base_block = $bl->getBlock()->getId();
+		}
+
+		$this->chests = [];
+		if ($cf["settings"]["particles"]) {
+			$this->getServer()->getScheduler()->scheduleRepeatingTask(
+					new ParticleTask($this),
+					$cf["settings"]["p-ticks"]);
+			}
+	}
+	private function saveInventory(Player $player,Inventory $inv) {
+		return $this->dbm->saveInventory($player,$inv);
+	}
+	private function loadInventory(Player $player,Inventory $inv) {
+		return $this->dbm->loadInventory($player,$inv);
+	}
+	private function lockChest(Player $player,$obj){
+		$cid = self::chestId($obj);
+		if (isset($this->chests[$cid])) return false;
+		$this->chests[$cid] = self::iName($player);
+		return true;
+	}
+	private function unlockChest(Player $player,$obj){
+		$cid = self::chestId($obj);
+		if (!isset($this->chests[$cid])) return false;
+		if ($this->chests[$cid] != self::iName($player)) return false;
+		unset($this->chests[$cid]);
+		return true;
+	}
+
+	public function isNeChest(Inventory $inv) {
+		if ($inv instanceof DoubleChestInventory) return false;
+		if (!($inv instanceof ChestInventory)) return false;
+		$tile = $inv->getHolder();
+		if (!($tile instanceof Chest)) return false;
+		$bl = $tile->getBlock();
+		if ($bl->getId() != Block::CHEST) return false;
+		if ($bl->getSide(Vector3::SIDE_DOWN)->getId() != $this->base_block) return false;
+		return true;
+	}
+	public function onBlockPlaceEvent(BlockPlaceEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$bl = $ev->getBlock();
+		if ($bl->getId() != Block::CHEST || $bl->getSide(Vector3::SIDE_DOWN)->getId() != $this->base_block) return;
+		$ev->getPlayer()->sendMessage(mc::_("Placed a NetherChest"));
+	}
+	public function onBlockBreakEvent(BlockBreakEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$bl = $ev->getBlock();
+		if ($bl->getId() == $this->base_block) $bl = $bl->getSide(Vector3::SIDE_UP);
+		if ($bl->getId() == Block::CHEST) {
+			$tile = $bl->getLevel()->getTile($bl);
+			if ($tile == null) return;
+			if (!($tile instanceof Chest)) return;
+			$inv = $tile->getInventory();
+			if (!$this->isNeChest($inv)) return;
+			$cid = self::chestId($inv);
+			if (!isset($this->chests[$cid])) return;
+			$ev->getPlayer()->sendTip(mc::_("That NetherChest is in use!"));
+			$ev->setCancelled();
+			return;
+		}
+	}
+
+	public function onPlayerQuitEvent(PlayerQuitEvent $ev) {
+		$pn = self::iName($ev->getPlayer());
+		foreach (array_keys($this->chests) as $cid) {
+			if ($this->chests[$cid] == $pn) {
+				unset($this->chests[$cid]);
+				list($level,$x,$y,$z) = explode(":",$cid);
+				$level = $this->getServer()->getLevelByName($level);
+				if ($level == null) continue;
+				$tile = $level->getTile(new Vector3($x,$y,$z));
+				if ($tile == null) continue;
+				if (!($tile instanceof Chest)) continue;
+				$inv = $tile->getInventory();
+				if (!$this->isNeChest($inv)) continue;
+				// QUITING WHILE NETHER CHEST IS OPEN!
+				$this->saveInventory($ev->getPlayer(),$inv);
+			}
+		}
+	}
+	public function onInventoryCloseEvent(InventoryCloseEvent $ev) {
+		$player = $ev->getPlayer();
+		$inv = $ev->getInventory();
+		if (!$this->isNeChest($inv)) return;
+		if ($this->unlockChest($player,$inv)) {
+			$player->sendMessage(mc::_("Closing NetherChest!"));
+			$this->saveInventory($player,$inv);
+		}
+	}
+	public function onInventoryOpenEvent(InventoryOpenEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$player = $ev->getPlayer();
+		$inv = $ev->getInventory();
+		if (!$this->isNeChest($inv)) return;
+		if (!$this->lockChest($player,$inv)) {
+			$player->sendTip(mc::_("That NetherChest is in use!"));
+			$ev->setCancelled();
+			return;
+		}
+		$player->sendMessage(mc::_("Opening NetherChest!"));
+		$this->loadInventory($player,$inv);
+	}
+
+}
+<?php
+namespace aliuly\nechest\common;
+
+/**
+ * Simple translation class in the style of **gettext**.
+ *
+ * You can actually use **gettext** tools to process these files.
+ * For example, to create/update a message catalogue use:
+ *
+ * `xgettext --no-wrap [-j] [-o file]`
+ *
+ * Where -j is used to join an existing catalague.
+ * -o file is the output file.
+ *
+ * Basic usage:
+ *
+ * * mc::load("messages.po|messages.ini");
+ * * mc::plugin_init($plugin,$plugin->getFile());
+ * * mc::_("string to translate\n")
+ * * mc::_("string to translate %1% %2%\n",$arg1,$arg2)
+ * * mc::n(mc::\_("singular form"),mc::\_("Plural form"),$count)
+ */
+abstract class mc {
+	/** @var str[] $txt Message translations */
+	public static $txt = [];
+	/** Main translation function
+	 *
+	 * This translates strings.  The naming of "_" is to make it compatible
+	 * with gettext utilities.  The string can contain "%1%", "%2%, etc...
+	 * These are inserted from the following arguments.  Use "%%" to insert
+	 * a single "%".
+	 *
+	 * @param str[] $args - messages
+	 * @return str translated string
+	 */
+	public static function _(...$args) {
+		$fmt = array_shift($args);
+		if (isset(self::$txt[$fmt])) $fmt = self::$txt[$fmt];
+		if (count($args)) {
+			$vars = [ "%%" => "%" ];
+			$i = 1;
+			foreach ($args as $j) {
+				$vars["%$i%"] = $j;
+				++$i;
+			}
+			$fmt = strtr($fmt,$vars);
+		}
+		return $fmt;
+	}
+	/**
+	 * Plural and singular forms.
+	 *
+	 * @param str $a - Singular form
+	 * @param str $b - Plural form
+	 * @param int $c - the number to test to select between $a or $b
+	 * @return str - Either plural or singular forms depending on the value of $c
+	 */
+	public static function n($a,$b,$c) {
+		return $c == 1 ? $a : $b;
+	}
+	/**
+	 * Load a message file for a PocketMine plugin.  Only uses .ini files.
+	 *
+	 * @param Plugin $plugin - owning plugin
+	 * @param str $path - output of $plugin->getFile()
+	 */
+	public static function plugin_init($plugin,$path) {
+		if (file_exists($plugin->getDataFolder()."messages.ini")) {
+			self::load($plugin->getDataFolder()."messages.ini");
+			return;
+		}
+		$msgs = $path."resources/messages/".
+				$plugin->getServer()->getProperty("settings.language").
+				".ini";
+		if (!file_exists($msgs)) return;
+		mc::load($msgs);
+	}
+	/**
+	 * Load the specified message catalogue.
+	 * Can read .ini or .po files.
+	 * @param str $f - Filename to load
+	 */
+	public static function load($f) {
+		$potxt = "\n".file_get_contents($f)."\n";
+		if (preg_match('/\nmsgid\s/',$potxt)) {
+			$potxt = preg_replace('/\\\\n"\n"/',"\\n",
+										 preg_replace('/\s+""\s*\n\s*"/'," \"",
+														  $potxt));
+		}
+		foreach (['/\nmsgid "(.+)"\nmsgstr "(.+)"\n/',
+					 '/^\s*"(.+)"\s*=\s*"(.+)"\s*$/m'] as $re) {
+			$c = preg_match_all($re,$potxt,$mm);
+			if ($c) {
+				for ($i=0;$i<$c;++$i) {
+					if ($mm[2][$i] == "") continue;
+					eval('$a = "'.$mm[1][$i].'";');
+					eval('$b = "'.$mm[2][$i].'";');
+					mc::$txt[$a] = $b;
+				}
+				return $c;
+			}
+		}
+		return false;
+	}
+}
+<?php
+namespace aliuly\nechest;
+use pocketmine\plugin\PluginBase;
+use pocketmine\Player;
+use pocketmine\inventory\Inventory;
+use pocketmine\utils\Config;
+use pocketmine\item\Item;
+
+class YamlMgr implements DatabaseManager {
+  protected $isGlobal;
+  protected $owner;
+	public function __construct(PluginBase $owner,$cf) {
+    $this->owner = $owner;
+    $this->isGlobal = $cf["settings"]["global"];
+  }
+  protected function getDataFolder() {
+    return $this->owner->getDataFolder();
+  }
+  public function saveInventory(Player $player,Inventory $inv) {
+    $n = trim(strtolower($player->getName()));
+    if ($n === "") return false;
+    $d = substr($n,0,1);
+    if (!is_dir($this->getDataFolder().$d)) mkdir($this->getDataFolder().$d);
+
+    $path =$this->getDataFolder().$d."/".$n.".yml";
+    $cfg = new Config($path,Config::YAML);
+    $yaml = $cfg->getAll();
+    if ($this->isGlobal)
+      $ln = "*";
+    else
+      $ln = trim(strtolower($player->getLevel()->getName()));
+
+    $yaml[$ln] = [];
+
+    foreach ($inv->getContents() as $slot=>&$item) {
+      $yaml[$ln][$slot] = implode(":",[ $item->getId(),
+                             $item->getDamage(),
+                             $item->getCount() ]);
+    }
+    $inv->clearAll();
+    $cfg->setAll($yaml);
+    $cfg->save();
+    return true;
+
+  }
+  public function loadInventory(Player $player,Inventory $inv) {
+		$n = trim(strtolower($player->getName()));
+		if ($n === "") return false;
+		$d = substr($n,0,1);
+		$path =$this->getDataFolder().$d."/".$n.".yml";
+		if (!is_file($path)) return false;
+
+		$cfg = new Config($path,Config::YAML);
+		$yaml = $cfg->getAll();
+    if ($this->isGlobal)
+      $ln = "*";
+    else
+      $ln = trim(strtolower($player->getLevel()->getName()));
+
+		if (!isset($yaml[$ln])) return false;
+
+		$inv->clearAll();
+		foreach($yaml[$ln] as $slot=>$t) {
+			list($id,$dam,$cnt) = explode(":",$t);
+			$item = Item::get($id,$dam,$cnt);
+			$inv->setItem($slot,$item);
+		}
+		return true;
+	}
+	public function close() {}
+}
+<?php
+namespace aliuly\nechest;
+use pocketmine\plugin\PluginBase;
+use pocketmine\Player;
+use pocketmine\inventory\Inventory;
+
+
+interface DatabaseManager {
+	public function __construct(PluginBase $owner,$isGlobal);
+  public function saveInventory(Player $player,Inventory $inv);
+  public function loadInventory(Player $player,Inventory $inv);
+	public function close();
+}
+<?php
+namespace aliuly\nechest;
+use pocketmine\scheduler\PluginTask;
+use pocketmine\plugin\PluginBase;
+use pocketmine\tile\Chest;
+use pocketmine\level\particle\SmokeParticle;
+use pocketmine\math\Vector3;
+
+
+class ParticleTask extends PluginTask{
+	protected static function randy($p,$r,$o) {
+		return $p+(mt_rand()/mt_getrandmax())*$r+$o;
+	}
+	protected static function randVector(Vector3 $center) {
+		return new Vector3(self::randy($center->getX(),2,-0.5),
+								 self::randy($center->getY(),0.5,0.5),
+								 self::randy($center->getZ(),2,-0.5));
+	}
+	public function onRun($currentTick){
+		if ($this->owner->isDisabled()) return;
+		foreach ($this->owner->getServer()->getLevels() as $lv) {
+			foreach ($lv->getTiles() as $tile) {
+				if (!($tile instanceof Chest)) continue;
+				if (!($this->owner->isNeChest($tile->getInventory()))) continue;
+				$lv->addParticle(new SmokeParticle(self::randVector($tile)));
+			}
+		}
+	}
+}

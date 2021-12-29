@@ -1,0 +1,276 @@
+name: ChatToolsPro
+main: ChatToolsPro\Main
+version: 1.2
+api: [1.0.0, 2.0.0, 3.0.0, 3.0.0-ALPHA, 3.0.0-ALPHA1, 4.0.0, 5.0.0]
+load: POSTWORLD
+author: paetti
+description: Chat Tools by paetti.
+commands:
+ chattoolspro:
+  description: ChatToolsPro Help
+  usage: "/ctp <1/2/3/4/5>."
+  aliases: [ctp]
+ bmessage:
+  description: Broadcast configured messages
+  usage: "/bmessage <1/2/3/4/5>."
+  aliases: [bmsg]
+  permission: chattoolspro.bmessage
+ checkop:
+  description: Check if a Player is OP or not.
+  usage: "/checkop <Player>."
+  permission: chattoolspro.checkop
+ helpme:
+  description: Adds [NeedsHelp] Tag to a Name
+  usage: "/helpme."
+  permission: chattoolspro.helpme
+ support:
+  description: Broadcasts a Message as [Support]
+  usage: "/support <Message>."
+  aliases: [supportsay, saysupport]
+  permission: chattoolspro.supportsay
+ warning:
+  description: Broadcasts a Message as [Warning]
+  usage: "/warning <Message>."
+  aliases: [warnsay]
+  permission: chattoolspro.warning
+ announcement:
+  description: Broadcasts a Message as [Announcement]
+  usage: "/announcement."
+  aliases: [sayannounce]
+  permission: chattoolspro.announcement
+ alert:
+  description: Broadcasts a Message as [ALERT]
+  usage: "/alert <Message>."
+  aliases: [alertsay]
+  permission: chattoolspro.alert
+ infos:
+  description: Broadcasts a Message as [Info]
+  usage: "/info <Message>."
+  aliases: [infosay]
+  permission: chattoolspro.info
+ done:
+  description: Removes [NeedsHelp] Tag from a Name
+  aliases: [donehelp]
+  usage: "/helpdone."
+  permission: chattoolspro.done
+ serversay:
+  description: Broadcasts a Message as [Server]
+  usage: "/serversay."
+  aliases: [sayserver,svs]
+  permission: chattoolspro.serversay
+ staffsay:
+  description: Broadcasts a Message as [Staff]
+  usage: "/staffsay."
+  aliases: [saystaff,sts]
+  permission: chattoolspro.staffsay
+ warn:
+  description: Warns a Player
+  usage: "/warn <Player> <Reason>."
+  permission: chattoolspro.warn
+ vmsg:
+  description: Sends an anonymous Message to a Player without the Sender Name
+  usage: "/vmsg <Player> <Message>."
+  permission: chattoolspro.vmsg
+ chatsay:
+  description: Broadcast a Message without any Tag
+  usage: "/chatsay <Message>."
+  permission: chattoolspro.chatsay
+ tipgive:
+  description: Give an Player a Tip
+  usage: "/tipgive <Player> <Tip>."
+  permission: chattoolspro.tipgive
+ setnick:
+  description: Sets an Nick
+  usage: "/setnick <Nick>."
+  permission: chattoolspro.setnick
+ delnick:
+  description: Delete Nick of yourself or another Player
+  usage: "/delnick [Player]."
+  permission: chattoolspro.delnick
+ send:
+  description: Display one Player a message without prefix
+  usage: "/send <Player> <message>."
+  permission: chattoolspro.send
+ spam:
+  description: Spam
+  usage: "/spam."
+  permission: chattoolspro.spam
+ sayas:
+  description: Send a Message as another Player
+  usage: "/sayas <Player> <Message>."
+  permission: chattoolspro.sayas
+ spammsg:
+  description: Send a Message to another Player more times at once
+  usage: "/spammsg <Player> <Message>."
+  permission: chattoolspro.spammsg
+ spamsay:
+  description: Spams a Message into the chat
+  usage: "/spamsay <Message>."
+  permission: chattoolspro.spamsay
+ clearchat:
+  description: Clears the Chat.
+  usage: "/clearchat."
+  permission: chattoolspro.clearchat
+ hug:
+  description: Hug a Player.
+  usage: "/hug <Player>."
+  permission: chattoolspro.hug
+ opfake:
+  description: Fake op a Player.
+  usage: "/opfake <Player>."
+  permission: chattoolspro.opfake
+ deopfake:
+  description: Fake Deop a Player.
+  usage: "/deopfake <Player>."
+  permission: chattoolspro.deopfake
+ report:
+  description: Report a Player
+  usage: "/report <Player> <Reason>."
+  permission: chattoolspro.report
+ ops:
+  description: See online OP's by a List
+  usage: "/ops"
+  permission: chattoolspro.ops
+ lockchat:
+  description: Lock or Unlock the Chat
+  usage: "/lockchat <lock/unlock>"
+  permission: chattoolspro.lockchat
+ rainbowchat:
+  description: Enable or Disable Rainbow Chat
+  usage: "/rainbowchat <on/off>"
+  aliases: [rbc]
+  permission: chattoolspro.rainbowchat
+ twitter:
+  description: See Twitter Info
+  usage: "/twitter"
+  permission: chattoolspro.twitter
+ instagram:
+  description: See Instagram Info
+  usage: "/instagram"
+  permission: chattoolspro.instagram
+ kik:
+  description: See Kik Info
+  usage: "/kik"
+  permission: chattoolspro.kik
+ youtube:
+  description: See YouTube Channel Info
+  usage: "/youtube"
+  permission: chattoolspro.youtube
+ stafflist:
+  description: View Staff List
+  usage: "/stafflist"
+  permission: chattoolspro.stafflist
+ rules:
+  description: View Rules
+  usage: "/rules"
+  permission: chattoolspro.rules
+ mute:
+  description: Mute a Player
+  usage: "/mute <Player>"
+  permission: chattoolspro.mute
+ unmute:
+  description: Unmute yourself or another Player
+  usage: "/unmute [Player]."
+  permission: chattoolspro.unmute
+ autospam:
+  description: Autospam a Player
+  usage: "/autospam <Player>"
+  permission: chattoolspro.autospam
+ stopspam:
+  description: Stop autospam a Player
+  usage: "/stopspam <Player>"
+  permission: chattoolspro.stopspam
+ illuminati:
+  description: Illuminati Message
+  usage: "/illuminati."
+  permission: chattoolspro.illuminati
+permissions:
+ chattoolspro.ctp:
+  default: true
+ chattoolspro.helpme:
+  default: true
+ chattoolspro.done:
+  default: true
+ chattoolspro.tipgive:
+  default: true
+ chattoolspro.twitter:
+  default: true
+ chattoolspro.instagram:
+  default: true
+ chattoolspro.kik:
+  default: true
+ chattoolspro.youtube:
+  default: true
+ chattoolspro.stafflist:
+  default: true
+ chattoolspro.rules:
+  default: true
+ chattoolspro.report:
+  default: true
+ chattoolspro.ops:
+  default: true
+ chattoolspro.hug:
+  default: true
+ chattoolspro.all:
+  default: op
+  children:
+   chattoolspro.spam:
+    default: op
+   chattoolspro.clearchat:
+    default: op
+   chattoolspro.spammsg:
+    default: op
+   chattoolspro.spamsay:
+    default: op
+   chattoolspro.opfake:
+    default: op
+   chattoolspro.deopfake:
+    default: op
+   chattoolspro.checkop:
+    default: op
+   chattoolspro.lockchat:
+    default: op
+   chattoolspro.rainbowchat:
+    default: op
+   chattoolspro.autospam:
+    default: op
+   chattoolspro.stopspam:
+    default: op
+   chattoolspro.illuminati:
+    default: op
+   chattoolspro.mute:
+    default: op
+   chattoolspro.unmute:
+    default: op
+   chattoolspro.announcement:
+    default: op
+   chattoolspro.bmessage:
+    default: op
+   chattoolspro.serversay:
+    default: op
+   chattoolspro.staffsay:
+    default: op
+   chattoolspro.support:
+    default: op
+   chattoolspro.warning:
+    default: op
+   chattoolspro.warn:
+    default: op
+   chattoolspro.vmsg:
+    default: op
+   chattoolspro.send:
+    default: op
+   chattoolspro.chatsay:
+    default: op
+   chattoolspro.alert:
+    default: op
+   chattoolspro.info:
+    default: op
+   chattoolspro.setnick:
+    default: op
+   chattoolspro.delnick:
+    default: op
+   chattoolspro.sayas:
+    default: op
+   chattoolspro.report.view:
+    default: op

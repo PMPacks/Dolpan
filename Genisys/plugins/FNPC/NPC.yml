@@ -1,0 +1,461 @@
+---
+10:
+  x: 123.702800
+  "y": 75.000000
+  z: 124.246600
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§e=-•§fSKYBLOCK§e•=-
+  clientID: 7702614
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+13:
+  x: 122.560200
+  "y": 75.000000
+  z: 102.426400
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§dHeoGM-(Chú-Bán-Cháo)
+  clientID: 5181745
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+6:
+  x: 111.120100
+  "y": 80.500000
+  z: 114.243400
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Hihi
+  clientID: 9679464
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+30:
+  x: 95.540600
+  "y": 79.000000
+  z: 127.278700
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Test
+  clientID: 9167766
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+((((((A-h-i-h-i))))):
+  x: 119.309300
+  "y": 75.000000
+  z: 112.302000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: ""
+  clientID: 4467972
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+17:
+  x: -504.339300
+  "y": 69.000000
+  z: -77.424000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Cancer-Roboto
+  clientID: 6321288
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+100:
+  x: 438.680600
+  "y": 60.000000
+  z: -430.865100
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§eAFK§f-§eHere
+  clientID: 5902710
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+1000:
+  x: 88.391200
+  "y": 70.000000
+  z: 267.583600
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §cPTK
+  clientID: 4315600
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+1001:
+  x: 92.606600
+  "y": 70.000000
+  z: 267.398700
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §dMinuhe2
+  clientID: 9037956
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+1:
+  x: 88.667100
+  "y": 70.000000
+  z: 264.970800
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: HeoGM
+  clientID: 4120060
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+1003:
+  x: 92.552200
+  "y": 70.000000
+  z: 264.426700
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §blonghay123
+  clientID: 1845817
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+3:
+  x: 97.536300
+  "y": 65.358700
+  z: 277.550600
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Polices
+  clientID: 1364289
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+4:
+  x: 90.413800
+  "y": 65.772500
+  z: 285.192300
+  level: pvpsv
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Helpers
+  clientID: 2269319
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+333:
+  x: 448.700000
+  "y": 60.000000
+  z: -412.700000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§dB-Builder:§fHeoGM
+  clientID: 7047938
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+102:
+  x: 448.700000
+  "y": 60.000000
+  z: -410.526000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§cOwner:§fPTK
+  clientID: 2741774
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+103:
+  x: 448.697100
+  "y": 60.000000
+  z: -408.409300
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§bPoliceOp:§fLonghay123
+  clientID: 4592917
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+104:
+  x: 448.700000
+  "y": 60.000000
+  z: -406.345900
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§eCo-Owner:§fMinuhe2
+  clientID: 4196209
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+3089:
+  x: 438.700000
+  "y": 60.000000
+  z: -427.082000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §cNEW!!!
+  clientID: 7690769
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+122:
+  x: -829.604700
+  "y": 70.000000
+  z: -822.549100
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§eBig-Builder:§fPHgaming,HeoGM
+  clientID: 1269865
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+123:
+  x: -824.403300
+  "y": 70.000000
+  z: -800.577400
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§cOwner:PTK
+  clientID: 3775158
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+124:
+  x: -813.580200
+  "y": 70.000000
+  z: -795.402400
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§bPolice:longhay123
+  clientID: 2825453
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+3099:
+  x: -799.852400
+  "y": 70.000000
+  z: -821.245200
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §aCo-Owner:§dMinuhe2
+  clientID: 4826726
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+178:
+  x: 448.354900
+  "y": 60.000000
+  z: -404.487900
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: §l§bCo-Owner:§eEzNoobs204
+  clientID: 8485932
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+1010:
+  x: 448.401600
+  "y": 57.000000
+  z: -406.300000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Đã-Bị-Loại
+  clientID: 7379765
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+3030:
+  x: 448.300000
+  "y": 57.000000
+  z: -404.700000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Đã-Bị-Loại
+  clientID: 4214332
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+99:
+  x: -513.426600
+  "y": 73.000000
+  z: -104.677400
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: CHA-LỨ(*NGỌNG*)
+  clientID: 8246138
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+109192:
+  x: -283.521500
+  "y": 69.000000
+  z: 89.549000
+  level: sb
+  yaw: ""
+  pitch: ""
+  skin: ""
+  nametag: Cái
+  clientID: 9807543
+  skinName: Standard_Custom
+  pay: 0
+  extra: ""
+  handItem:
+    id: 0
+    data: 0
+  type: normal
+...

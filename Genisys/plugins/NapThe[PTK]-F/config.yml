@@ -1,0 +1,15 @@
+---
+Vippay.Merchant_id: 9035
+Vippay.API_USER: dbfdb3be52da4fceab64290798a3e20d
+Vippay.API_PASSWORD: 25bda98cd2ff4ebcadb920138fe33650
+MySQL.Host: 127.0.0.1
+MySQL.Username: root
+MySQL.Password: kiencool6969
+MySQL.Database: napthe
+Rank.1: 30
+Rank.2: 70
+Rank.3: 140
+Rank.4: 200
+Rank.5: 250
+Rank.6: 310
+...

@@ -1,0 +1,10 @@
+name: Dial[PTK]
+main: PTK\Dial\Main
+version: 0.3.1
+author: PTK-KienPham
+api: 2.0.0
+load: POSTWORLD
+softdepend: ["EconomyAPI"]
+commands:
+    dial:
+        description: Quay Thưởng

@@ -1,0 +1,70 @@
+---
+addwarp-cmd: DatKhu
+addwarp-desc: Đạt thêm khu mới.
+addwarp-usage: /DatKhu <tên khu> [<ip> <port>|<x> <y> <z> <thế giới>|<người chơi>]
+addwarp-event-cancelled: Một plugin đã hủy bỏ việc tạo ra khu này.
+closewarp-cmd: KhoaKhu
+closewarp-desc: Khóa Khu.
+closewarp-usage: /KhoaKhu <tên khu>
+closewarp-event-cancelled: Plugin đã huỷ tác vụ này.
+delwarp-cmd: XoaKhu
+delwarp-desc: Xóa khu không cần.
+delwarp-usage: /XoaKhu <tên khu>
+delewarp-event-cancelled: A plugin has cancelled the deletion of this warp.
+listwarps-cmd: ListKhu
+listwarps-desc: Danh sách các khu.
+listwarps-usage: /ListKhu
+listwarps-list-title: |
+  Danh sách các khu còn hoạt động:
+listwarps-no-warps: §c✘§eKhông có khu nào cả.
+listwarps-noperm: §c✘§eBạn không có quyền dùng lênh này.
+openwarp-cmd: MoKhoaKhu
+openwarp-desc: Mở khóa khu.
+openwarp-usage: /MoKhoaKhu <tên khu>
+delwarp-event-cancelled: A plugin has cancelled this action.
+warp-cmd: Khu
+warp-desc: Dịch chuyển đến một khu trong server.
+warp-usage: /Khu <tên khu> [người chơi]
+warp-added-xyz: §a✔︎ §eĐã tạo khu §b%s§r %s
+warp-added-player: You have created a warp called §b%s§r %s
+warp-added-server: You have created a warp called §b%s§r %s
+warp-added-self: You have created a warp called §b%s§r %s
+level-not-loaded: |-
+  §cYou specified a level which isn't loaded.
+  Please see http://bit.ly/levelerror for explanation.§r
+needs-external-warps: This warp needs §bFastTransfer§r or a newer version of PocketMine.
+player-not-loaded: §cYou specified a player which isn't loaded.§r
+addwarp-noperm: §c✘§eBạn không có quyền dùng lệnh này.
+bad-warp-name: §cThat warp name is invalid.§r
+closed-warp-1: You have closed a warp called §b%s§r
+closed-warp-2: '  Only players with the permission §b%s§r will be able to use this
+  warp.'
+warp-doesnt-exist: §c✘§eKhu không tồn tại.
+closewarp-noperm: §c✘§eBạn không có quyền dùng lệnh này.
+warp-deleted: §a✔︎§eBạn đã xóa khu §b%s§r
+delwarp-noperm: §c✘§eBạn không có quyền dùng lệnh này.
+opened-warp-1: §a✔︎§eBạn đã mở khóa khu §b%s§r
+opened-warp-2: ' §9-§eBất cứ cũng có thể đến khu này.'
+openwarp-noperm: §c✘§eBạn không có quyền dùng lệnh này.
+warping-popup: §1=-=§eĐang dịch chuyển...§1=-=
+other-player-warped: §a✔︎§e%s đã được dịch chuyển đến khu §b%s§r.
+no-permission-this-warp: §c✘§eBạn không có quyền dùng lệnh này.
+no-permission-warp-other: §c✘§eBạn không có quyền dùng lệnh này.
+warp-done: §a✔§eBạn đã được dịch chuyển đến khu này.
+warp-noperm: §c✘§eBạn không có quyền dùng lệnh này.
+level-not-load-warp: §c✘§eKhu này ở một thế giới không được load.
+ess-warp-doesnt-exist: §cThat warp doesn't exist.§r
+ess-warp-conflict: The warp called §b%s§r exists in both §bTool§r and §bSimpleWarp§r.
+  The one from §bSimpleWarp§r will be used by default. If you wish to use the §bTool§r
+  warp, prefix the warp name with §3ess:§r
+addwarp-ess-prefix-warning: Support for §bTool§r is enabled on this server. When a
+  user wants to explicitly use an §bTool§r warp, they can prefix their command with
+  §3ess:§r. By choosing to pick a warp name that starts with the same prefix, you
+  are making things complicated. Maybe pick a different name?
+hold-still-popup: §cĐứng yên để dịch chuyển.
+hold-still-other: The target must hold still to complete the warp.
+hold-still-cancelled: §c✘§e Bạn không thể đến khu này vì bạn đã đi chuyển.
+hold-still-cancelled-other: The warp was unsuccessful because the target moved.
+warp-failed-popup: §c✘§eDịch chuyển thất bại.
+level-not-loaded-warp: The warp you are using is attached to a level which isn't loaded
+...

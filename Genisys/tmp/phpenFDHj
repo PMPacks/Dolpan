@@ -1,0 +1,1767 @@
+<?php
+//= cmd:/worldprotect,Main_Commands
+//: Main WorldProtect command
+//> usage: /worldprotect  _[world]_ _<subcmd>_ _[options]_
+//= cfg:features
+//: This section you can enable/disable modules.
+//: You do this in order to avoid conflicts between different
+//: PocketMine-MP plugins.  It has one line per feature:
+//:
+//:     feature: true|false
+//:
+//: If **true** the feature is enabled.  if **false** the feature is disabled.
+//:
+namespace aliuly\worldprotect;
+
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\command\CommandExecutor;
+use pocketmine\utils\Config;
+use pocketmine\utils\TextFormat;
+use pocketmine\level\Level;
+use pocketmine\event\level\LevelLoadEvent;
+use pocketmine\event\level\LevelUnloadEvent;
+use pocketmine\event\Listener;
+use pocketmine\Player;
+use aliuly\worldprotect\common\mc;
+use aliuly\worldprotect\common\MPMU;
+use aliuly\worldprotect\common\BasicPlugin;
+
+class Main extends BasicPlugin implements CommandExecutor,Listener {
+	protected $wcfg;
+	const SPAM_DELAY = 5;
+
+	public function onEnable() {
+		if (!is_dir($this->getDataFolder())) mkdir($this->getDataFolder());
+		mc::plugin_init($this,$this->getFile());
+		$cfg = $this->modConfig(__NAMESPACE__, [
+			"max-players" => [ "MaxPlayerMgr", false ],
+			"protect" => [ "WpProtectMgr", true ],
+			"border" => [ "WpBordersMgr", true ],
+			"pvp" => [ "WpPvpMgr", true ],
+			"motd" => [ "WpMotdMgr", false ],
+			"no-explode" => [ "NoExplodeMgr", false ],
+			"unbreakable" => [ "Unbreakable", false ],
+			"bancmds" => [ "BanCmd" , false ],
+			"banitem" => [ "BanItem", true ],
+			"gamemode" => [ "GmMgr", false ],
+			"gm-save-inv" => [ "GmSaveInv", false ],
+		], [
+			"version" => $this->getDescription()->getVersion(),
+			"motd" => WpMotdMgr::defaults(),
+		],mc::_("/%s [world] %s %s"));
+		$this->modules[] = new WpList($this);
+
+		// Make sure that loaded worlds are inded loaded...
+		foreach ($this->getServer()->getLevels() as $lv) {
+			$this->loadCfg($lv);
+		}
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	//
+	// Save/Load configurations
+	//
+	//////////////////////////////////////////////////////////////////////
+	public function loadCfg($world) {
+
+		if ($world instanceof Level) $world = $world->getName();
+		if (isset($this->wcfg[$world])) return true; // world is already loaded!
+		if (!$this->getServer()->isLevelGenerated($world)) return false;
+		if (!$this->getServer()->isLevelLoaded($world)) {
+			$path = $this->getServer()->getDataPath()."worlds/".$world."/";
+		} else {
+			$level = $this->getServer()->getLevelByName($world);
+			if (!$level) return false;
+			$path = $level->getProvider()->getPath();
+		}
+		$path .= "wpcfg.yml";
+		if (is_file($path)) {
+			$this->wcfg[$world] = (new Config($path,Config::YAML,[]))->getAll();
+			foreach ($this->modules as $i=>$mod) {
+				if (!($mod instanceof BaseWp)) continue;
+				if (isset($this->wcfg[$world][$i])) {
+					$mod->setCfg($world,$this->wcfg[$world][$i]);
+				} else {
+					$mod->unsetCfg($world);
+				}
+			}
+		} else {
+			$this->wcfg[$world] = [];
+			foreach ($this->modules as $i=>$mod) {
+				if (!($mod instanceof BaseWp)) continue;
+				$mod->unsetCfg($world);
+			}
+		}
+		return true;
+	}
+	public function saveCfg($world) {
+
+		if ($world instanceof Level) $world = $world->getName();
+		if (!isset($this->wcfg[$world])) return false; // Nothing to save!
+		if (!$this->getServer()->isLevelGenerated($world)) return false;
+		if (!$this->getServer()->isLevelLoaded($world)) {
+			$path = $this->getServer()->getDataPath()."worlds/".$world."/";
+		} else {
+			$level = $this->getServer()->getLevelByName($world);
+			if (!$level) return false;
+			$path = $level->getProvider()->getPath();
+		}
+		$path .= "wpcfg.yml";
+		if (count($this->wcfg[$world])) {
+			$yaml = new Config($path,Config::YAML,[]);
+			$yaml->setAll($this->wcfg[$world]);
+			$yaml->save();
+		} else {
+			unlink($path);
+		}
+		return true;
+	}
+	public function unloadCfg($world) {
+
+		if ($world instanceof Level) $world = $world->getName();
+		if (isset($this->wcfg[$world])) unset($this->wcfg[$world]);
+		foreach ($this->modules as $i=>$mod) {
+			if (!($mod instanceof BaseWp)) continue;
+			$mod->unsetCfg($world);
+		}
+	}
+	public function getCfg($world,$key,$default) {
+		if ($world instanceof Level) $world = $world->getName();
+		if ($this->getServer()->isLevelLoaded($world))
+			$unload = false;
+		else {
+			$unload = true;
+			if (!$this->loadCfg($world)) return $default;
+		}
+		if (isset($this->wcfg[$world]) && isset($this->wcfg[$world][$key])) {
+			$res = $this->wcfg[$world][$key];
+		} else {
+			$res = $default;
+		}
+		if ($unload) $this->unloadCfg($world);
+		return $res;
+	}
+	public function setCfg($world,$key,$value) {
+		if ($world instanceof Level) $world = $world->getName();
+		if ($this->getServer()->isLevelLoaded($world))
+			$unload = false;
+		else {
+			$unload = true;
+			if (!$this->loadCfg($world)) return false;
+		}
+		if (!isset($this->wcfg[$world]) || !isset($this->wcfg[$world][$key]) ||
+			 $value !== $this->wcfg[$world][$key]) {
+			if (!isset($this->wcfg[$world])) $this->wcfg[$world] = [];
+			$this->wcfg[$world][$key] = $value;
+			$this->saveCfg($world);
+		}
+		if (isset($this->modules[$key])
+			 && ($this->modules[$key] instanceof BaseWp))
+			$this->modules[$key]->setCfg($world,$value);
+		if ($unload) $this->unloadCfg($world);
+		return true;
+	}
+	public function unsetCfg($world,$key) {
+		if ($world instanceof Level) $world = $world->getName();
+		if ($this->getServer()->isLevelLoaded($world))
+			$unload = false;
+		else {
+			$unload = true;
+			if (!$this->loadCfg($world)) return false;
+		}
+		if (isset($this->wcfg[$world])) {
+			if (isset($this->wcfg[$world][$key])) {
+				unset($this->wcfg[$world][$key]);
+				$this->saveCfg($world);
+			}
+		}
+		if (isset($this->modules[$key])
+			 && ($this->modules[$key] instanceof BaseWp))
+			$this->modules[$key]->unsetCfg($world);
+		if ($unload) $this->unloadCfg($world);
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	//
+	// Event handlers
+	//
+	//////////////////////////////////////////////////////////////////////
+	public function onLevelLoad(LevelLoadEvent $e) {
+		$this->loadCfg($e->getLevel());
+	}
+	public function onLevelUnload(LevelUnloadEvent $e) {
+		$this->unloadCfg($e->getLevel());
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	//
+	// Command dispatcher
+	//
+	//////////////////////////////////////////////////////////////////////
+	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
+		if ($cmd->getName() != "worldprotect") return false;
+		if ($sender instanceof Player) {
+			$world = $sender->getLevel()->getName();
+		} else {
+			$level = $this->getServer()->getDefaultLevel();
+			if ($level) {
+				$world = $level->getName();
+			} else {
+				$world = null;
+			}
+		}
+		if (isset($args[0]) && $this->getServer()->isLevelGenerated($args[0])) {
+			$world = array_shift($args);
+		}
+		if ($world === null) {
+			$sender->sendMessage(mc::_("[WP] Must specify a world"));
+			return false;
+		}
+		if (!$this->isAuth($sender,$world)) return true;
+		return $this->dispatchSCmd($sender,$cmd,$args,$world);
+	}
+	public function canPlaceBreakBlock(Player $c,$world) {
+		$pname = strtolower($c->getName());
+		if (isset($this->wcfg[$world]["auth"])
+			 && count($this->wcfg[$world]["auth"])) {
+			// Check if user is in auth list...
+			if (isset($this->wcfg[$world]["auth"][$pname])) return true;
+			return false;
+		}
+		if ($c->hasPermission("wp.cmd.protect.auth")) return true;
+		return false;
+	}
+
+	public function isAuth($c,$world) {
+		if (!($c instanceof Player)) return true;
+		if (!isset($this->wcfg[$world])) return true;
+		if (!isset($this->wcfg[$world]["auth"])) return true;
+		if (!count($this->wcfg[$world]["auth"])) return true;
+
+		$iusr = strtolower($c->getName());
+		if (isset($this->wcfg[$world][$iusr])) return true;
+		$c->sendMessage(mc::_("[WP] You are not allowed to do this"));
+		return false;
+	}
+	public function authAdd($world,$usr) {
+		$auth = $this->getCfg($world,"auth",[]);
+		if (isset($auth[$usr])) return;
+		$auth[$usr] = $usr;
+		$this->setCfg($world,"auth",$auth);
+	}
+	public function authCheck($world,$usr) {
+		$auth = $this->getCfg($world,"auth",[]);
+		return isset($auth[$usr]);
+	}
+	public function authRm($world,$usr) {
+		$auth = $this->getCfg($world,"auth",[]);
+		if (!isset($auth[$usr])) return;
+		unset($auth[$usr]);
+		if (count($auth)) {
+			$this->setCfg($world,"auth",$auth);
+		} else {
+			$this->unsetCfg($world,"auth");
+		}
+	}
+	public function msg($pl,$txt) {
+		if (MPMU::apiVersion("1.12.0")) {
+			$pl->sendTip($txt);
+			return;
+		}
+		list($time,$otxt)= $this->getState("spam",$pl,[0,""]);
+		if (time() - $time < self::SPAM_DELAY && $otxt == $txt) return;
+		$this->setState("spam",$pl,[time(),$txt]);
+		$pl->sendMessage($txt);
+	}
+	/**
+	 * @API
+	 */
+	public function getMaxPlayers($world){
+		if (isset($this->modules["max-players"]))
+			return $this->modules["max-players"]->getMaxPlayers($world);
+		return null;
+	}
+}
+<?php
+namespace aliuly\worldprotect\common;
+
+use pocketmine\plugin\PluginBase;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\command\CommandExecutor;
+use pocketmine\utils\TextFormat;
+use pocketmine\utils\Config;
+
+use aliuly\worldprotect\common\mc;
+use aliuly\worldprotect\common\BasicHelp;
+use aliuly\worldprotect\common\Session;
+use aliuly\worldprotect\common\SubCommandMap;
+
+/**
+ * Simple extension to the PocketMine PluginBase class
+ */
+abstract class BasicPlugin extends PluginBase {
+	protected $modules = [];
+	protected $scmdMap = null;
+	protected $session;
+
+	/**
+	 * Given some defaults, this will load optional features
+	 *
+	 * @param str $ns - namespace used to search for classes to load
+	 * @param array $mods - optional module definition
+	 * @param array $defaults - default options to use for config.yml
+	 * @param str $xhlp - optional help format.
+	 * @return array
+	 */
+	protected function modConfig($ns,$mods,$defaults,$xhlp="") {
+		if (!isset($defaults["features"])) $defaults["features"] = [];
+		foreach ($mods as $i => $j) {
+			$defaults["features"][$i] = $j[1];
+		}
+		$cfg=(new Config($this->getDataFolder()."config.yml",
+									  Config::YAML,$defaults))->getAll();
+		$this->modules = [];
+		foreach ($cfg["features"] as $i=>$j) {
+			if (!isset($mods[$i])) {
+				$this->getLogger()->info(mc::_("Unknown feature \"%1%\" ignored.",$i));
+				continue;
+			}
+			if (!$j) continue;
+			$class = $mods[$i][0];
+			if (is_array($class)) {
+				while (count($class) > 1) {
+					// All classes before the last one are dependencies...
+					$classname = $dep = array_shift($class);
+					if(strpos($classname,"\\") === false) $classname = $ns."\\".$classname;
+					if (isset($this->modules[$dep])) continue; // Dependancy already loaded
+					if(isset($cfg[strtolower($dep)])) {
+						$this->modules[$dep] = new $classname($this,$cfg[strtolower($dep)]);
+					} else {
+						$this->modules[$dep] = new $classname($this);
+					}
+				}
+				// The last class in the array implements the actual feature
+				$class = array_shift($class);
+			}
+			if(strpos($class,"\\") === false) $class = $ns."\\".$class;
+			if (isset($cfg[$i]))
+				$this->modules[$i] = new $class($this,$cfg[$i]);
+			else
+				$this->modules[$i] = new $class($this);
+		}
+		$c = count($this->modules);
+		if ($c == 0) {
+			$this->getLogger()->info(mc::_("NO features enabled"));
+			return;
+		}
+		$this->session = null;
+		$this->getLogger()->info(mc::n(mc::_("Enabled one feature"),
+													 mc::_("Enabled %1% features",$c),
+													 $c));
+		if ($this->scmdMap !== null && $this->scmdMap->getCommandCount() > 0) {
+			$this->modules[] = new BasicHelp($this,$xhlp);
+		}
+		return $cfg;
+	}
+  /**
+	 * Get module
+	 * @param str $module - module to retrieve
+	 * @return mixed|null
+	 */
+	public function getModule($str) {
+		if (isset($this->modules[$str])) return $this->modules[$str];
+		return null;
+	}
+	/**
+	 * Save a config section to the plugins' config.yml
+	 *
+	 * @param str $key - section to save
+	 * @param mixed $settings - settings to save
+	 */
+	public function cfgSave($key,$settings) {
+		$cfg=new Config($this->getDataFolder()."config.yml",Config::YAML);
+		$dat = $cfg->getAll();
+		$dat[$key] = $settings;
+		$cfg->setAll($dat);
+		$cfg->save();
+	}
+	/**
+	 * Dispatch commands using sub command table
+	 */
+	protected function dispatchSCmd(CommandSender $sender,Command $cmd,array $args,$data=null) {
+		if ($this->scmdMap === null) {
+			$sender->sendMessage(mc::_("No sub-commands available"));
+			return false;
+		}
+		return $this->scmdMap->dispatchSCmd($sender,$cmd,$args,$data);
+	}
+	/** Look-up sub command map
+	 * @returns SubCommandMap
+	 */
+	public function getSCmdMap() {
+		return $this->scmdMap;
+	}
+	/**
+	 * Register a sub command
+	 * @param str $cmd - sub command
+	 * @param callable $callable - callable to execute
+	 * @param array $opts - additional options
+	 */
+	public function registerSCmd($cmd,$callable,$opts) {
+		if ($this->scmdMap === null) {
+			$this->scmdMap = new SubCommandMap();
+		}
+		$this->scmdMap->registerSCmd($cmd,$callable,$opts);
+	}
+	/**
+	 * Get a player state for the desired module/$label.
+	 *
+	 * @param str $label - state variable to get
+	 * @param Player|str $player - Player instance or name
+	 * @param mixed $default - default value to return is no state found
+	 * @return mixed
+	 */
+	public function getState($label,$player,$default) {
+		if ($this->session === null) return $default;
+		return $this->session->getState($label,$player,$default);
+	}
+	/**
+	 * Set a player related state
+	 *
+	 * @param str $label - state variable to set
+	 * @param Player|str $player - player instance or their name
+	 * @param mixed $val - value to set
+	 * @return mixed
+	 */
+	public function setState($label,$player,$val) {
+		if ($this->session === null) $this->session = new Session($this);
+		return $this->session->setState($label,$player,$val);
+	}
+	/**
+	 * Clears a player related state
+	 *
+	 * @param str $label - state variable to clear
+	 * @param Player|str $player - intance of Player or their name
+	 */
+	public function unsetState($label,$player) {
+		if ($this->session === null) return;
+		$this->session->unsetState($label,$player);
+	}
+
+	/**
+	 * Gets the contents of an embedded resource on the plugin file.
+	 *
+	 * @param string $filename
+	 * @return string|null
+	 */
+	public function getResourceContents($filename){
+		$fp = $this->getResource($filename);
+		if($fp === null){
+			return null;
+		}
+		$contents = stream_get_contents($fp);
+		fclose($fp);
+		return $contents;
+	}
+	/**
+	 * Lets you dump the messages.ini file
+	 */
+	 public function getMessagesIni(){
+		 return $this->getResourceContents("messages/messages.ini");
+	 }
+}
+<?php
+namespace aliuly\worldprotect\common;
+
+/**
+ * Simple translation class in the style of **gettext**.
+ *
+ * You can actually use **gettext** tools to process these files.
+ * For example, to create/update a message catalogue use:
+ *
+ * `xgettext --no-wrap [-j] [-o file]`
+ *
+ * Where -j is used to join an existing catalague.
+ * -o file is the output file.
+ *
+ * Basic usage:
+ *
+ * * mc::load("messages.po|messages.ini");
+ * * mc::plugin_init($plugin,$plugin->getFile());
+ * * mc::_("string to translate\n")
+ * * mc::_("string to translate %1% %2%\n",$arg1,$arg2)
+ * * mc::n(mc::\_("singular form"),mc::\_("Plural form"),$count)
+ */
+abstract class mc {
+	/** @var str[] $txt Message translations */
+	public static $txt = [];
+	/** Main translation function
+	 *
+	 * This translates strings.  The naming of "_" is to make it compatible
+	 * with gettext utilities.  The string can contain "%1%", "%2%, etc...
+	 * These are inserted from the following arguments.  Use "%%" to insert
+	 * a single "%".
+	 *
+	 * @param str[] $args - messages
+	 * @return str translated string
+	 */
+	public static function _(...$args) {
+		$fmt = array_shift($args);
+		if (isset(self::$txt[$fmt])) $fmt = self::$txt[$fmt];
+		if (count($args)) {
+			$vars = [ "%%" => "%" ];
+			$i = 1;
+			foreach ($args as $j) {
+				$vars["%$i%"] = $j;
+				++$i;
+			}
+			$fmt = strtr($fmt,$vars);
+		}
+		return $fmt;
+	}
+	/**
+	 * Plural and singular forms.
+	 *
+	 * @param str $a - Singular form
+	 * @param str $b - Plural form
+	 * @param int $c - the number to test to select between $a or $b
+	 * @return str - Either plural or singular forms depending on the value of $c
+	 */
+	public static function n($a,$b,$c) {
+		return $c == 1 ? $a : $b;
+	}
+	/**
+	 * Load a message file for a PocketMine plugin.  Only uses .ini files.
+	 *
+	 * @param Plugin $plugin - owning plugin
+	 * @param str $path - output of $plugin->getFile()
+	 * @return int|false - false on error or the number of messages loaded
+	 */
+	public static function plugin_init($plugin,$path) {
+		if (file_exists($plugin->getDataFolder()."messages.ini")) {
+			return self::load($plugin->getDataFolder()."messages.ini");
+		}
+		$msgs = $path."resources/messages/".
+				$plugin->getServer()->getProperty("settings.language").
+				".ini";
+		if (!file_exists($msgs)) return false;
+		return self::load($msgs);
+	}
+
+	/**
+	 * Load the specified message catalogue.
+	 * Can read .ini or .po files.
+	 * @param str $f - Filename to load
+	 * @return int|false - returns the number of strings loaded or false on error
+	 */
+	public static function load($f) {
+		$potxt = "\n".file_get_contents($f)."\n";
+		if (preg_match('/\nmsgid\s/',$potxt)) {
+			$potxt = preg_replace('/\\\\n"\n"/',"\\n",
+										 preg_replace('/\s+""\s*\n\s*"/'," \"",
+														  $potxt));
+		}
+		foreach (['/\nmsgid "(.+)"\nmsgstr "(.+)"\n/',
+					 '/^\s*"(.+)"\s*=\s*"(.+)"\s*$/m'] as $re) {
+			$c = preg_match_all($re,$potxt,$mm);
+			if ($c) {
+				for ($i=0;$i<$c;++$i) {
+					if ($mm[2][$i] == "") continue;
+					eval('$a = "'.$mm[1][$i].'";');
+					eval('$b = "'.$mm[2][$i].'";');
+					self::$txt[$a] = $b;
+				}
+				return $c;
+			}
+		}
+		return false;
+	}
+}
+<?php
+//= cmd:/motd,Main_Commands
+//: Shows the world's *motd* text
+//> usage: /motd  _[world]_
+//:
+//: Shows the *motd* text of a _world_.  This can be used to show
+//:   rules around a world.
+//= cmd:motd,Sub_Commands
+//: Modifies the world's *motd* text.
+//> usage: /wp _[world]_ **motd** _<text>_
+//:
+//: Let's you modify the world's *motd* text.  The command only
+//: supports a single line, however you can modify the *motd* text
+//: by editing the **wpcfg.yml** file that is stored in the **world**
+//: folder.  For example:
+//: - [CODE]
+//:   - motd:
+//:     - line 1
+//:     - line 2
+//:     - line 3
+//:     - line 4... etc
+//: - [/CODE]
+//= features
+//: * Automatically displayed/per world MOTD
+
+//= docs
+//: Show a text file when players enter a world.  To explain players
+//: what is allowed (or not allowed) in specific worlds.  For example
+//: you could warn players when they are entering a PvP world.
+//:
+
+namespace aliuly\worldprotect;
+
+use pocketmine\plugin\PluginBase as Plugin;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\command\CommandExecutor;
+use pocketmine\event\Listener;
+
+use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\entity\EntityLevelChangeEvent;
+use pocketmine\Player;
+use aliuly\worldprotect\common\PluginCallbackTask;
+use aliuly\worldprotect\common\mc;
+
+class WpMotdMgr extends BaseWp implements Listener, CommandExecutor {
+	protected $ticks;
+	protected $auto;
+
+	static public function defaults() {
+		return [
+			//= cfg:motd
+			"# ticks" => "line delay when showing multi-line motd texts.",
+			"ticks" => 15,
+			"# auto-motd" => "Automatically shows motd when entering world",
+			"auto-motd" => true,
+		];
+	}
+	public function __construct(Plugin $plugin,$cfg) {
+		parent::__construct($plugin);
+		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
+		$this->ticks = $cfg["ticks"];
+		$this->auto  = $cfg["auto-motd"];
+		$this->enableSCmd("motd",["usage" => mc::_("[text]"),
+										  "help" => mc::_("Edits world motd text"),
+										  "permission" => "wp.cmd.wpmotd"]);
+
+		$this->enableCmd("motd",
+							  ["description"=>mc::_("Shows world motd text"),
+								"usage" => "/motd [world]",
+								"permission" => "wp.motd" ]);
+	}
+
+
+	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
+		if ($cmd->getName() != "motd") return false;
+		if ($sender instanceof Player) {
+			$world = $sender->getLevel()->getName();
+		} else {
+			$level = $this->owner->getServer()->getDefaultLevel();
+			if ($level) {
+				$world = $level->getName();
+			} else {
+				$world = null;
+			}
+		}
+		if (isset($args[0]) && $this->owner->getServer()->isLevelGenerated($args[0])) {
+			$world = array_shift($args);
+		}
+		if ($world === null) {
+			$sender->sendMessage(mc::_("[WP] Must specify a world"));
+			return false;
+		}
+		if (count($args) != 0) return false;
+		$this->showMotd($sender,$world);
+		return true;
+	}
+
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		if ($scmd != "motd") return false;
+		if (count($args) == 0) {
+			$this->owner->unsetCfg($world,"motd");
+			$c->sendMessage(mc::_("[WP] motd for %1% removed",$world));
+			return true;
+		}
+		$this->owner->setCfg($world,"motd",implode(" ",$args));
+		$c->sendMessage(mc::_("[WP] motd for %1% updated",$world));
+		return true;
+	}
+
+	private function showMotd($c,$world) {
+		if (!$c->hasPermission("wp.motd")) return;
+
+		$motd = $this->owner->getCfg($world, "motd", null);
+		if ($motd === null) return true;
+		if (is_array($motd)) {
+			if ($c instanceof Player) {
+				$ticks = $this->ticks;
+				foreach ($motd as $ln) {
+					$this->owner->getServer()->getScheduler()->scheduleDelayedTask(new PluginCallbackTask($this->owner,[$c,"sendMessage"],[$ln]),$ticks);
+					$ticks += $this->ticks;
+				}
+			} else {
+				foreach ($motd as $ln) {
+					$c->sendMessage($ln);
+				}
+			}
+		} else {
+			$c->sendMessage($motd);
+		}
+	}
+
+	public function onJoin(PlayerJoinEvent $ev) {
+		if (!$this->auto) return;
+		$pl = $ev->getPlayer();
+		$this->showMotd($pl,$pl->getLevel()->getName());
+	}
+	public function onLevelChange(EntityLevelChangeEvent $ev) {
+		if (!$this->auto) return;
+		$pl = $ev->getEntity();
+		if (!($pl instanceof Player)) return;
+		$level = $ev->getTarget()->getName();
+		$this->showMotd($pl,$level);
+	}
+}
+<?php
+namespace aliuly\worldprotect;
+
+use pocketmine\command\ConsoleCommandSender;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\command\PluginCommand;
+
+use pocketmine\utils\TextFormat;
+use aliuly\worldprotect\common\BasicCli;
+
+abstract class BaseWp extends BasicCli {
+	protected $wcfg;
+
+	public function __construct($owner) {
+		parent::__construct($owner);
+		$this->wcfg = [];
+	}
+	//
+	// Config look-up cache
+	//
+	public function setCfg($world,$value) {
+		$this->wcfg[$world] = $value;
+	}
+	public function unsetCfg($world) {
+		if (isset($this->wcfg[$world])) unset($this->wcfg[$world]);
+	}
+	public function getCfg($world,$default) {
+		if (isset($this->wcfg[$world])) return $this->wcfg[$world];
+		return $default;
+	}
+}
+<?php
+namespace aliuly\worldprotect\common;
+
+use pocketmine\command\ConsoleCommandSender;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\command\PluginCommand;
+use pocketmine\Player;
+
+use pocketmine\utils\TextFormat;
+
+/**
+ * Implements Basic CLI common functionality.  It is useful for plugins
+ * that implement multiple commands or sub-commands
+ */
+abstract class BasicCli {
+	protected $owner;
+	/**
+	 * @param BasicPlugin @owner - Plugin that owns this module
+	 */
+	public function __construct($owner) {
+		$this->owner = $owner;
+	}
+  /**
+	 * Register this class as a sub-command.  See BasicPlugin for details.
+	 *
+	 * @param str $cmd - sub-command to register
+	 * @param mixed[] $opts - additional options for registering sub-command
+	 */
+	public function enableSCmd($cmd,$opts) {
+		$this->owner->registerScmd($cmd,[$this,"onSCommand"],$opts);
+	}
+	/**
+	 * Register this class as a command.
+	 *
+	 * @param str $cmd - command to register
+	 * @param mixed[] $yaml - options for command
+	 */
+	public function enableCmd($cmd,$yaml) {
+		$newCmd = new PluginCommand($cmd,$this->owner);
+		if (isset($yaml["description"]))
+			$newCmd->setDescription($yaml["description"]);
+		if (isset($yaml["usage"]))
+			$newCmd->setUsage($yaml["usage"]);
+		if(isset($yaml["aliases"]) and is_array($yaml["aliases"])) {
+			$aliasList = [];
+			foreach($yaml["aliases"] as $alias) {
+				if(strpos($alias,":")!== false) {
+					$this->owner->getLogger()->info("Unable to load alias $alias");
+					continue;
+				}
+				$aliasList[] = $alias;
+			}
+			$newCmd->setAliases($aliasList);
+		}
+		if(isset($yaml["permission"]))
+			$newCmd->setPermission($yaml["permission"]);
+		if(isset($yaml["permission-message"]))
+			$newCmd->setPermissionMessage($yaml["permission-message"]);
+		$newCmd->setExecutor($this);
+		$cmdMap = $this->owner->getServer()->getCommandMap();
+		$cmdMap->register($this->owner->getDescription()->getName(),$newCmd);
+	}
+	/**
+	 * Use for paginaged output implementation.
+	 * This gets the player specified page number that we want to Display
+	 *
+	 * @param str[] $args - Passed arguments
+	 * @return int page number
+	 */
+	protected function getPageNumber(array &$args) {
+		$pageNumber = 1;
+		if (count($args) && is_numeric($args[count($args)-1])) {
+			$pageNumber = (int)array_pop($args);
+			if($pageNumber <= 0) $pageNumber = 1;
+		}
+		return $pageNumber;
+	}
+	/**
+	 * Use for paginaged output implementation.
+	 * Shows a bunch of line in paginated output.
+	 *
+	 * @param CommandSender $sender - entity that we need to display text to
+	 * @param int $pageNumber - page that we need to display
+	 * @param str[] $txt - Array containing one element per output line
+	 * @return bool true
+	 */
+	protected function paginateText(CommandSender $sender,$pageNumber,array $txt) {
+		$hdr = array_shift($txt);
+		if($sender instanceof ConsoleCommandSender){
+			$sender->sendMessage( TextFormat::GREEN.$hdr.TextFormat::RESET);
+			foreach ($txt as $ln) $sender->sendMessage($ln);
+			return true;
+		}
+		$pageHeight = 5;
+		$lineCount = count($txt);
+		$pageCount = intval($lineCount/$pageHeight) + ($lineCount % $pageHeight ? 1 : 0);
+		$hdr = TextFormat::GREEN.$hdr. TextFormat::RESET;
+		if ($pageNumber > $pageCount) {
+			$sender->sendMessage($hdr);
+			$sender->sendMessage("Only $pageCount pages available");
+			return true;
+		}
+		$hdr .= TextFormat::RED." ($pageNumber of $pageCount)";
+		$sender->sendMessage($hdr);
+		for ($ln = ($pageNumber-1)*$pageHeight;$ln < $lineCount && $pageHeight--;++$ln) {
+			$sender->sendMessage($txt[$ln]);
+		}
+		return true;
+	}
+	/**
+	 * Use for paginaged output implementation.
+	 * Formats and paginates a table
+	 *
+	 * @param CommandSender $sender - entity that we need to display text to
+	 * @param int $pageNumber - page that we need to display
+	 * @param str[][] $txt - Array containing one element per cell
+	 * @return bool true
+	 */
+	protected function paginateTable(CommandSender $sender,$pageNumber,array $tab) {
+		$cols = [];
+		for($i=0;$i < count($tab[0]);$i++) $cols[$i] = strlen($tab[0][$i]);
+		foreach ($tab as $row) {
+			for($i=0;$i < count($row);$i++) {
+				if (($l=strlen($row[$i])) > $cols[$i]) $cols[$i] = $l;
+			}
+		}
+		$txt = [];
+		$fmt = "";
+		foreach ($cols as $c) {
+			if (strlen($fmt) > 0) $fmt .= " ";
+			$fmt .= "%-".$c."s";
+		}
+		foreach ($tab as $row) {
+			$txt[] = sprintf($fmt,...$row);
+		}
+		return $this->paginateText($sender,$pageNumber,$txt);
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	/**
+   * Entry point for BasicPlugin state functionality.  This makes it module
+	 * specific.
+	 * Retrieves the state.
+	 *
+	 * @param CommandSender $player - entity that we need state from
+	 * @param mixed $default - Default value to return if no state found
+	 * @return mixed $state
+	 */
+	public function getState(CommandSender $player,$default) {
+		return $this->owner->getState(get_class($this),$player,$default);
+	}
+	/**
+   * Entry point for BasicPlugin state functionality.  This makes it module
+	 * specific.
+	 * Sets the state.
+	 *
+	 * @param CommandSender $player - entity that we need to set state
+	 * @param mixed $val - Value to use for the state
+	 */
+	public function setState(CommandSender $player,$val) {
+		$this->owner->setState(get_class($this),$player,$val);
+	}
+	/**
+   * Entry point for BasicPlugin state functionality.  This makes it module
+	 * specific.
+	 * UnSets the state.
+	 *
+	 * @param CommandSender $player - entity that we need to unset state
+	 */
+	public function unsetState(CommandSender $player) {
+		$this->owner->unsetState(get_class($this),$player);
+	}
+}
+<?php
+namespace aliuly\worldprotect;
+//= cmd:add,Sub_Commands
+//: Add player to the authorized list
+//> usage: /wp _[world]_ **add** _<player>_
+//= cmd:rm,Sub_Commands
+//: Removes player from the authorized list
+//> usage: /wp _[world]_ **rm** _<player>_
+//=  cmd:unlock,Sub_Commands
+//: Removes protection
+//> usage: /wp _[world]_ **unlock**
+//= cmd:lock,Sub_Commands
+//: Locks world, not even Op can use.
+//> usage: /wp _[world]_ **lock**
+//= cmd:protect,Sub_Commands
+//: Protects world, only certain players can build.
+//> usage: /wp _[world]_ **protect**
+//:
+//: When in this mode, only players in the _authorized_ list can build.
+//: If there is no authorized list, it will use **wp.cmd.protect.auth**
+//: permission instead.
+//:
+//= features
+//: * Protect worlds from building/block breaking
+//
+//= docs
+//: This plugin protects worlds from griefers by restricing placing and breaking
+//: blocks.  Worlds have three protection levels:
+//:
+//: * unlock - anybody can place/break blocks
+//: * protect - players in the _authorized_ list or, if the list is empty,
+//:   players with **wp.cmd.protect.auth** permission can place/break
+//:   blocks.
+//: * lock - nobody (even *ops*) is allowed to place/break blocks.
+//:
+
+
+use pocketmine\plugin\PluginBase as Plugin;
+use pocketmine\event\Listener;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\Player;
+
+use pocketmine\block\Block;
+use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
+use aliuly\worldprotect\common\mc;
+
+class WpProtectMgr extends BaseWp implements Listener {
+	public function __construct(Plugin $plugin) {
+		parent::__construct($plugin);
+		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
+		$this->enableSCmd("add",["usage" => mc::_("<user>"),
+										 "help" => mc::_("Add <user> to authorized list"),
+										 "permission" => "wp.cmd.addrm"]);
+		$this->enableSCmd("rm",["usage" => mc::_("<user>"),
+										"help" => mc::_("Remove <user> from authorized list"),
+										"permission" => "wp.cmd.addrm"]);
+		$this->enableSCmd("unlock",["usage" => "",
+											 "help" => mc::_("Unprotects world"),
+											 "permission" => "wp.cmd.protect",
+											 "aliases" => ["unprotect","open"]]);
+		$this->enableSCmd("lock",["usage" => "",
+										  "help" => mc::_("Locked\n\tNobody (including op) can build"),
+										  "permission" => "wp.cmd.protect"]);
+		$this->enableSCmd("protect",["usage" => "",
+											  "help" => mc::_("Only authorized (or op) can build"),
+											  "permission" => "wp.cmd.protect"]);
+	}
+
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		switch ($scmd) {
+			case "add":
+				if (!count($args)) return false;
+				foreach ($args as $i) {
+					$player = $this->owner->getServer()->getPlayer($i);
+					if (!$player) {
+						$player = $this->owner->getServer()->getOfflinePlayer($i);
+						if ($player == null || !$player->hasPlayedBefore()) {
+							$c->sendMessage(mc::_("[WP] %1%: not found",$i));
+							continue;
+						}
+					}
+					$iusr = strtolower($player->getName());
+					$this->owner->authAdd($world,$iusr);
+					$c->sendMessage(mc::_("[WP] %1% added to %2%'s auth list",$i,$world));
+					if ($player instanceof Player)
+						$player->sendMessage(mc::_("[WP] You have been added to\n[WP] %1%'s auth list",$world));
+				}
+				return true;
+			case "rm":
+				if (!count($args)) return false;
+
+				foreach ($args as $i) {
+					$iusr = strtolower($i);
+					if ($this->owner->authCheck($world,$iusr)) {
+						$this->owner->authRm($world,$iusr);
+						$c->sendMessage(mc::_("[WP] %1% removed from %2%'s auth list",$i,$world));
+						$player = $this->owner->getServer()->getPlayer($i);
+						if ($player) {
+							$player->sendMessage(mc::_("[WP] You have been removed from\n[WP] %1%'s auth list", $world));
+						}
+					} else {
+						$c->sendMessage(mc::_("[WP] %1% not known",$i));
+					}
+				}
+				return true;
+			case "unlock":
+				if (count($args)) return false;
+				$this->owner->unsetCfg($world,"protect");
+				$this->owner->getServer()->broadcastMessage(mc::_("[WP] %1% is now OPEN",$world));
+				return true;
+			case "lock":
+				if (count($args)) return false;
+				$this->owner->setCfg($world,"protect",$scmd);
+				$this->owner->getServer()->broadcastMessage(mc::_("[WP] %1% is now LOCKED",$world));
+				return true;
+			case "protect":
+				if (count($args)) return false;
+				$this->owner->setCfg($world,"protect",$scmd);
+				$this->owner->getServer()->broadcastMessage(mc::_("[WP] %1% is now PROTECTED",$world));
+				return true;
+		}
+		return false;
+	}
+
+	protected function checkBlockPlaceBreak(Player $p) {
+		$world = $p->getLevel()->getName();
+		if (!isset($this->wcfg[$world])) return true;
+		if ($this->wcfg[$world] != "protect") return false; // LOCKED!
+		return $this->owner->canPlaceBreakBlock($p,$world);
+	}
+
+	public function onBlockBreak(BlockBreakEvent $ev){
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getPlayer();
+		if ($this->checkBlockPlaceBreak($pl)) return;
+		$this->owner->msg($pl,mc::_("You are not allowed to do that here"));
+		$ev->setCancelled();
+	}
+
+	public function onBlockPlace(BlockPlaceEvent $ev){
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getPlayer();
+		if ($this->checkBlockPlaceBreak($pl)) return;
+		$this->owner->msg($pl,mc::_("You are not allowed to do that here"));
+		$ev->setCancelled();
+	}
+}
+<?php
+namespace aliuly\worldprotect\common;
+
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use aliuly\worldprotect\common\mc;
+
+/**
+ * Sub Command dispatcher
+ */
+class SubCommandMap {
+  public function __construct() {
+    $this->executors = [];
+    $this->help = [];
+    $this->usage = [];
+    $this->aliases = [];
+    $this->permission = [];
+  }
+  /**
+   * Returns the number of commands configured
+   */
+  public function getCommandCount() {
+    return count($this->executors);
+  }
+  /**
+   * Dispatch commands using sub command table
+   */
+  public function dispatchSCmd(CommandSender $sender,Command $cmd,array $args,$data=null) {
+    if (count($args) == 0) {
+      $sender->sendMessage(mc::_("No sub-command specified"));
+      return false;
+    }
+    $scmd = strtolower(array_shift($args));
+    if (isset($this->aliases[$scmd])) {
+      $scmd = $this->aliases[$scmd];
+    }
+    if (!isset($this->executors[$scmd])) {
+      $sender->sendMessage(mc::_("Unknown sub-command %2% (try /%1% help)",$cmd->getName(),$scmd));
+      return false;
+    }
+    if (isset($this->permission[$scmd])) {
+      if (!$sender->hasPermission($this->permission[$scmd])) {
+        $sender->sendMessage(mc::_("You are not allowed to do this"));
+        return true;
+      }
+    }
+    $callback = $this->executors[$scmd];
+    if ($callback($sender,$cmd,$scmd,$data,$args)) return true;
+    if (isset($this->executors["help"])) {
+      $callback = $this->executors["help"];
+      return $callback($sender,$cmd,$scmd,$data,["usage"]);
+    }
+    return false;
+  }
+  /**
+	 * Register a sub command
+	 * @param str $cmd - sub command
+	 * @param callable $callable - callable to execute
+	 * @param array $opts - additional options
+	 */
+	public function registerSCmd($cmd,$callable,$opts) {
+		$cmd = strtolower($cmd);
+		$this->executors[$cmd] = $callable;
+
+    if (isset($opts["help"])) {
+      $this->help[$cmd] = $opts["help"];
+      ksort($this->help);
+    }
+    if (isset($opts["usage"])) $this->usage[$cmd] = $opts["usage"];
+    if (isset($opts["permission"])) $this->permission[$cmd] = $opts["permission"];
+		if (isset($opts["aliases"])) {
+			foreach ($opts["aliases"] as $alias) {
+				$this->aliases[$alias] = $cmd;
+			}
+		}
+	}
+
+  public function getUsage($scmd) {
+    return isset($this->usage[$scmd]) ? $this->usage[$scmd] : null;
+  }
+  public function getAlias($scmd) {
+    return isset($this->aliases[$scmd]) ? $this->aliases[$scmd] : null;
+  }
+  public function getHelpMsg($scmd) {
+    return isset($this->help[$scmd]) ? $this->help[$scmd] : null;
+  }
+  public function getHelp() {
+    return $this->help;
+  }
+  public function getAliases() {
+    return $this->aliases;
+  }
+}
+<?php
+//= cmd:border,Sub_Commands
+//: defines a border for a world
+//> usage: /wp  _[world]_ **border** _[range|none|x1 z1 x2 z2]_
+//:
+//: Defines a border for an otherwise infinite world.  Usage:
+//>   - /wp _[world]_ **border**
+//:     - will show the current borders for _[world]_.
+//>   - /wp _[world]_ **border** _x1 z1 x2 z2_
+//:     - define the border as the region defined by _x1,z1_ and _x2,z2_.
+//>   - /wp _[world]_ **border** _range_
+//:     - define the border as being _range_ blocks in `x` and `z` axis away
+//:       from the spawn point.
+//>   - /wp _[world]_ **border** **none**
+//:     - Remove borders
+//:
+//= features
+//: * World borders
+
+//= docs
+//: It is possible to create limits in your limitless worlds.
+//: So players are not able to go beyond a preset border.  This is
+//: useful if you want to avoid overloading the server by
+//: generating new Terrain.
+//:
+
+
+namespace aliuly\worldprotect;
+
+use pocketmine\plugin\PluginBase as Plugin;
+use pocketmine\event\Listener;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\Player;
+use aliuly\worldprotect\common\mc;
+
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
+
+class WpBordersMgr extends BaseWp implements Listener {
+	public function __construct(Plugin $plugin) {
+		parent::__construct($plugin);
+		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
+		$this->enableSCmd("border",["usage" => mc::_("[range|none|x1 z1 x2 z2]"),
+											 "help" => mc::_("Creates a border defined\n\tby x1,z1 to x2,z2\n\tUse [none] to remove\n\tIf [range] is specified the border is\n\t-range,-range to range,range\n\taround the spawn point"),
+											 "permission" => "wp.cmd.border"]);
+
+	}
+
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		if ($scmd != "border") return false;
+		if (count($args) == 0) {
+			$limits = $this->owner->getCfg($world,"border",null);
+			if ($limits == null) {
+				$c->sendMessage(mc::_("[WP] %1% has no borders",$world));
+			} else {
+				list($x1,$z1,$x2,$z2) = $limits;
+				$c->sendMessage(mc::_("[WP] Border for %1% is (%2%,%3%)-(%4%,%5%)",
+											 $world,$x1,$z1,$x2,$z2));
+			}
+			return true;
+		}
+		if (count($args) == 1) {
+			$range = intval($args[0]);
+			if ($range == 0) {
+				$this->owner->unsetCfg($world,"border");
+				$this->owner->getServer()->broadcastMessage(mc::_("[WP] Border for %1% removed",$world));
+				return true;
+			}
+			if (!$this->owner->getServer()->isLevelLoaded($world)) {
+				if (!$this->owner->getServer()->loadLevel($world)) {
+					$c->sendMessage(mc::_("Error loading level %1%",$world));
+					return true;
+				}
+				$unload = true;
+			} else
+				$unload = false;
+			$l = $this->owner->getServer()->getLevelByName($world);
+			if (!$l) {
+				$c->sendMessage(mc::_("Unable to find level %1%",$world));
+				return true;
+			}
+			$pos = $l->getSpawnLocation();
+			if ($unload) $this->owner->getServer()->unloadLevel($l);
+			$args = [ $pos->getX() - $range, $pos->getZ() - $range,
+						 $pos->getX() + $range, $pos->getZ() + $range ];
+
+		}
+		if (count($args) == 4) {
+			list($x1,$z1,$x2,$z2) = $args;
+			if (!is_numeric($x1) || !is_numeric($z1)
+				 || !is_numeric($x2) || !is_numeric($z2)) {
+				$c->sendMessage(mc::_("[WP] Invalid border specification"));
+				return false;
+			}
+			if ($x1 > $x2) list($x1,$x2) = [$x2,$x1];
+			if ($z1 > $z2) list($z1,$z2) = [$z2,$z1];
+			$this->owner->setCfg($world,"border",[$x1,$z1,$x2,$z2]);
+			$this->owner->getServer()->broadcastMessage(mc::_("[WP] Border for %1% set to (%2%,%3%)-(%4%,%5%)", $world, $x1,$z1, $x2, $z2));
+			return true;
+		}
+		return false;
+	}
+
+	private function checkMove($world,$x,$z) {
+		if (!isset($this->wcfg[$world])) return true;
+		list($x1,$z1,$x2,$z2) = $this->wcfg[$world];
+		if ($x1 < $x && $x < $x2 && $z1 < $z && $z < $z2) return true;
+		return false;
+	}
+
+	public function onPlayerMove(PlayerMoveEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getPlayer();
+		$pos = $ev->getTo();
+		if ($this->checkMove($pl->getLevel()->getName(),
+									$pos->getX(),$pos->getZ())) return;
+		$this->owner->msg($pl,mc::_("You have reached the end of the world"));
+		$ev->setCancelled();
+	}
+
+	public function onTeleport(EntityTeleportEvent $ev){
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getEntity();
+		if (!($pl instanceof Player)) return;
+		$to = clone $ev->getTo();
+		if (!$to) return;// This should never happen!
+		if ($to->getLevel()) {
+			$world = $to->getLevel()->getName();
+		} else {
+			$from = $ev->getFrom();
+			if (!$from) return; // OK, this would be weird...
+			if (!$from->getLevel()) return; // Can't determine the level at all!
+			$world = $from->getLevel()->getName();
+		}
+		if ($this->checkMove($world,$to->getX(),$to->getZ())) return;
+		$this->owner->msg($pl,mc::_("You are teleporting outside the world"));
+		$ev->setCancelled();
+	}
+
+}
+<?php
+namespace aliuly\worldprotect;
+//= cmd:pvp,Sub_Commands
+//: Controls PvP in a world
+//> usage: /wp  _[world]_ **pvp** _[on|off|spawn-off]_
+//>   - /wp _[world]_ **pvp** **off**
+//:     - no PvP is allowed.
+//>   - /wp _[world]_ **pvp** **on**
+//:     - PvP is allowed
+//>   - /wp _[world]_ **pvp** **spawn-off**
+//:     - PvP is allowed except if inside the spawn area.
+//:
+//= features
+//: * Per World PvP
+
+use pocketmine\plugin\PluginBase as Plugin;
+use pocketmine\event\Listener;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\Player;
+use pocketmine\utils\TextFormat;
+use aliuly\worldprotect\common\mc;
+
+class WpPvpMgr extends BaseWp implements Listener {
+	public function __construct(Plugin $plugin) {
+		parent::__construct($plugin);
+		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
+		$this->enableSCmd("pvp",["usage" => mc::_("[on|off|spawn-off]"),
+										 "help" => mc::_("Control PvP in world"),
+										 "permission" => "wp.cmd.pvp"]);
+	}
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		if ($scmd != "pvp") return false;
+		if (count($args) == 0) {
+			$pvp = $this->owner->getCfg($world, "pvp", true);
+			if ($pvp === true) {
+				$c->sendMessage(mc::_("[WP] PvP in %1% is %2%",$world,TextFormat::RED.mc::_("ON")));
+			} elseif ($pvp === false) {
+				$c->sendMessage(mc::_("[WP] PvP in %1% is %2%",$world,TextFormat::GREEN.mc::_("OFF")));
+			} else {
+				$c->sendMessage(mc::_("[WP] PvP in %1% is %2%",$world,TextFormat::YELLOW.mc::_("Off in Spawn")));
+			}
+			return true;
+		}
+		if (count($args) != 1) return false;
+		switch (substr(strtolower($args[0]),0,2)) {
+			case "sp":
+				$this->owner->setCfg($world,"pvp","spawn-off");
+				$this->owner->getServer()->broadcastMessage(TextFormat::YELLOW.mc::_("[WP] NO PvP in %1%'s spawn",$world));
+				break;
+			case "on":
+			case "tr":
+				$this->owner->unsetCfg($world,"pvp");
+				$this->owner->getServer()->broadcastMessage(TextFormat::RED.mc::_("[WP] PvP is allowed in %1%",$world));
+				break;
+			case "of":
+			case "fa":
+				$this->owner->setCfg($world,"pvp",false);
+				$this->owner->getServer()->broadcastMessage(TextFormat::GREEN.mc::_("[WP] NO PvP in %1%",$world));
+				break;
+			default:
+				return false;
+		}
+		return true;
+	}
+
+	public function onPvP(EntityDamageEvent $ev) {
+		if ($ev->isCancelled()) return;
+		if(!($ev instanceof EntityDamageByEntityEvent)) return;
+		if (!(($pl = $ev->getEntity()) instanceof Player
+				&& $ev->getDamager() instanceof Player)) return;
+		$world = $pl->getLevel()->getName();
+		if (!isset($this->wcfg[$world])) return;
+		if ($this->wcfg[$world] !== false) {
+			$sp = $pl->getLevel()->getSpawnLocation();
+			$dist = $sp->distance($pl);
+			if ($dist > $this->owner->getServer()->getSpawnRadius()) return;
+		}
+		$this->owner->msg($ev->getDamager(),mc::_("You are not allowed to do that here"));
+		$ev->setCancelled();
+	}
+}
+<?php
+//= cmd:banitem|unbanitem,Sub_Commands
+//: Control itmes that can/cannot be used
+//> usage: /wp  _[world]_ **banitem|unbanitem** _[Item-ids]_
+//:
+//: Manages which Items can or can not be used in a given world.
+//:  You can get a list of items currently banned
+//:  if you do not specify any _[item-ids]_.  Otherwise these are
+//:  added or removed from the list.
+//:
+//= features
+//: * Ban specific items in a world
+//
+//= docs
+//: Some items are able to modify a world by being consume (i.e. do not
+//: need to be placed).  For example, _bonemeal_, _water or lava buckets_.
+//: To prevent this type of griefing, you can use the **banitem**
+//: feature.
+//:
+
+namespace aliuly\worldprotect;
+
+use pocketmine\plugin\PluginBase as Plugin;
+use pocketmine\event\Listener;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+
+use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerItemConsumeEvent;
+use pocketmine\item\Item;
+use pocketmine\Player;
+use aliuly\worldprotect\common\mc;
+use aliuly\worldprotect\common\ItemName;
+
+class BanItem extends BaseWp implements Listener {
+	public function __construct(Plugin $plugin) {
+		parent::__construct($plugin);
+		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
+		$this->enableSCmd("banitem",["usage" => mc::_("[id] ..."),
+											  "help" => mc::_("Ban an item"),
+											  "permission" => "wp.cmd.banitem"]);
+		$this->enableSCmd("unbanitem",["usage" => mc::_("[id] ..."),
+												 "help" => mc::_("Unban item"),
+												 "permission" => "wp.cmd.banitem"]);
+	}
+
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		if ($scmd != "banitem" && $scmd != "unbanitem") return false;
+		if (count($args) == 0) {
+			$ids = $this->owner->getCfg($world, "banitem", []);
+			if (count($ids) == 0) {
+				$c->sendMessage(mc::_("[WP] No banned items in %1%",$world));
+			} else {
+				$ln  = mc::_("[WP] Items(%1%):",count($ids));
+				$q = "";
+				foreach ($ids as $id=>$n) {
+					$ln .= "$q $n($id)";
+					$q = ",";
+				}
+				$c->sendMessage($ln);
+			}
+			return true;
+		}
+		$cc = 0;
+
+		$ids = $this->owner->getCfg($world, "banitem", []);
+		if ($scmd == "unbanitem") {
+			foreach ($args as $i) {
+				$item = Item::fromString($i);
+				if (isset($ids[$item->getId()])) {
+					unset($ids[$item->getId()]);
+					++$cc;
+				}
+			}
+		} elseif ($scmd == "banitem") {
+			foreach ($args as $i) {
+				$item = Item::fromString($i);
+				if (isset($ids[$item->getId()])) continue;
+				$ids[$item->getId()] = ItemName::str($item);
+				++$cc;
+			}
+		} else {
+			return false;
+		}
+		if (!$cc) {
+			$c->sendMessage(mc::_("No items updated"));
+			return true;
+		}
+		if (count($ids)) {
+			$this->owner->setCfg($world,"banitem",$ids);
+		} else {
+			$this->owner->unsetCfg($world,"banitem");
+		}
+		$c->sendMessage(mc::_("Items changed: %1%",$cc));
+		return true;
+	}
+	public function onInteract(PlayerInteractEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getPlayer();
+		$world = $pl->getLevel()->getName();
+		if (!isset($this->wcfg[$world])) return;
+		$item = $ev->getItem();
+		if (!isset($this->wcfg[$world][$item->getId()])) return;
+		$pl->sendMessage(mc::_("You can not use that item here!"));
+		$ev->setCancelled();
+	}
+	public function onConsume(PlayerItemConsumeEvent $ev) {
+		if ($ev->isCancelled()) return;
+		$pl = $ev->getPlayer();
+		$world = $pl->getLevel()->getName();
+		if (!isset($this->wcfg[$world])) return;
+		$item = $ev->getItem();
+		if (!isset($this->wcfg[$world][$item->getId()])) return;
+		$pl->sendMessage(mc::_("You can not use that item here!"));
+		$ev->setCancelled();
+	}
+}
+<?php
+namespace aliuly\worldprotect\common;
+
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\utils\TextFormat;
+use aliuly\worldprotect\common\mc;
+use aliuly\worldprotect\common\BasicCli;
+
+/**
+ * Implements simple help functionality for sub-commands
+ */
+class BasicHelp extends BasicCli {
+	protected $fmt;
+	/**
+	 * @param PluginBase $owner - plugin that owns this command
+	 */
+	public function __construct($owner,$fmt = "/%s %s %s") {
+		parent::__construct($owner);
+		$this->enableSCmd("help",["aliases"=>["?"]]);
+		$this->fmt = $fmt;
+	}
+	/**
+	 * Entry point for sub-commands.  Will show the help or usage messages
+	 *
+	 * @param CommandSender $c - Entity issuing the command
+	 * @param Command $cc - actual command that was issued
+	 * @param str $scmd - sub-command being executed
+	 * @param mixed $data - Additional data passed to sub-command (global options)
+	 * @param str[] $args - arguments for sub-command
+	 */
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$data,array $args) {
+		$cm = $this->owner->getSCmdMap();
+		$pageNumber = $this->getPageNumber($args);
+
+		if (count($args)) {
+			if ($args[0] == "usage") {
+				if ($cm->getUsage($scmd) === null) return false;
+				$c->sendMessage(TextFormat::RED.mc::_("Usage: ").
+									 sprintf($this->fmt,
+												$cc->getName(),
+												$scmd, $cm->getUsage($scmd)));
+				return true;
+			}
+			$txt = [ "Help for ".$cc->getName() ];
+
+			foreach ($args as $i) {
+				if ($cm->getAlias($i) !== null) $i=$cm->getAlias($i);
+				if ($cm->getHelpMsg($i) === null && $cm->getUsage($i) === null) {
+					$txt[] = TextFormat::RED.mc::_("No help for %1%",$i);
+					continue;
+				}
+
+				$txt[] = TextFormat::YELLOW.mc::_("Help: ").TextFormat::WHITE.
+						 "/".$cc->getName()." $i";
+				if ($cm->getHelpMsg($i) !== null)
+					$txt[] = TextFormat::YELLOW.mc::_("Description: ").
+							 TextFormat::WHITE.$cm->getHelpMsg($i);
+				if ($cm->getUsage($i) !== null)
+					$txt[] = TextFormat::YELLOW.mc::_("Usage: ").
+							 TextFormat::WHITE.
+							 sprintf($this->fmt,$cc->getName(),$i,$cm->getUsage($i));
+			}
+			return $this->paginateText($c,$pageNumber,$txt);
+		}
+
+		$txt = [ mc::_("Available sub-commands for %1%",$cc->getName()) ];
+		foreach ($cm->getHelp() as $cn => $desc) {
+			$ln = TextFormat::GREEN.$cn;
+			foreach ($cm->getAliases() as $i => $j) {
+				if ($j == $cn) $ln .= "|$i";
+			}
+			$ln .= ": ".TextFormat::WHITE.$desc;
+			$txt[] = $ln;
+		}
+		return $this->paginateText($c,$pageNumber,$txt);
+	}
+}
+<?php
+//= cmd:ls,Sub_Commands
+//: List info on world protection.
+//> usage: /wp **ls** _[world]_
+//>    - /wp **ls**
+//:      - shows an overview of protections applied to all loaded worlds
+//>    - /wp **ls** _[world]_
+//:      - shows details of an specific world
+namespace aliuly\worldprotect;
+
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
+use pocketmine\utils\TextFormat;
+use pocketmine\utils\Config;
+use aliuly\worldprotect\common\mc;
+use aliuly\worldprotect\common\MPMU;
+
+class WpList extends BaseWp {
+	public function __construct($owner) {
+		parent::__construct($owner);
+		$this->enableSCmd("ls",["usage" => mc::_("[world]"),
+										"help" => mc::_("Show protections on worlds"),
+										"permission" => "wp.cmd.info",
+										"aliases" => ["info"]]);
+	}
+	public function onSCommand(CommandSender $c,Command $cc,$scmd,$world,array $args) {
+		$pageNumber = $this->getPageNumber($args);
+
+		if (count($args)==1) return $this->wpDetails($c,$args[0],$pageNumber);
+		if (count($args)==0) return $this->wpList($c,$pageNumber);
+		return false;
+	}
+	private function wpDetails(CommandSender $c,$world,$pageNumber) {
+		if (!$this->owner->getServer()->isLevelGenerated($world)) {
+			$c->sendMessage(mc::_("World %1% does not exist",$world));
+			return;
+		}
+		$f = $this->owner->getServer()->getDataPath(). "worlds/$world/wpcfg.yml";
+		if (!is_file($f)) {
+			$c->sendMessage(mc::_("World %1% is not protected",$world));
+			return;
+		}
+		$wcfg=(new Config($f,Config::YAML))->getAll();
+		$txt = [mc::_("Details for %1%",$world)];
+		if (isset($wcfg["protect"]))
+			$txt[] = TextFormat::AQUA.mc::_("Protect:  ").
+					 TextFormat::WHITE.$wcfg["protect"];
+
+		if (isset($wcfg["max-players"]))
+			$txt[] = TextFormat::AQUA.mc::_("Max Players:  ").
+					 TextFormat::WHITE.$wcfg["max-players"];
+		if (isset($wcfg["gamemode"]))
+			$txt[] = TextFormat::AQUA.mc::_("Gamemode:  ").
+					 TextFormat::WHITE.MPMU::gamemodeStr($wcfg["gamemode"]);
+
+		if (isset($wcfg["pvp"])) {
+			if ($wcfg["pvp"] === true) {
+				$txt[] = TextFormat::AQUA.mc::_("PvP: ").TextFormat::RED.mc::_("on");
+			} elseif ($wcfg["pvp"] === false) {
+				$txt[] = TextFormat::AQUA.mc::_("PvP: ").TextFormat::GREEN.mc::_("off");
+			} else {
+				$txt[] = TextFormat::AQUA.mc::_("PvP: ").TextFormat::YELLOW.mc::_("spawn-off");
+			}
+		}
+		if (isset($wcfg["no-explode"])) {
+			if ($wcfg["no-explode"] === "off") {
+				$txt[] = TextFormat::AQUA.mc::_("NoExplode: ").TextFormat::RED.mc::_("off");
+			} elseif ($wcfg["no-explode"] === "world") {
+				$txt[] = TextFormat::AQUA.mc::_("NoExplode: ").TextFormat::GREEN.mc::_("world");
+			} else {
+				$txt[] = TextFormat::AQUA.mc::_("NoExplode: ").TextFormat::YELLOW.mc::_("spawn");
+			}
+		}
+		if (isset($wcfg["border"]))
+			$txt[] = TextFormat::AQUA.mc::_("Border: ").TextFormat::WHITE.
+					 implode(",",$wcfg["border"]);
+		if (isset($wcfg["auth"]))
+			$txt[] = TextFormat::AQUA.mc::_("Auth List(%1%): ",count($wcfg["auth"])).
+					 TextFormat::WHITE.implode(",",$wcfg["auth"]);
+
+		if (isset($wcfg["unbreakable"]))
+			$txt[] = TextFormat::AQUA.mc::_("Unbreakable(%1%): ",count($wcfg["unbreakable"])).
+					 TextFormat::WHITE.implode(",",$wcfg["unbreakable"]);
+		if (isset($wcfg["bancmds"]))
+			$txt[] = TextFormat::AQUA.mc::_("Ban Commands(%1%): ",count($wcfg["bancmds"])).
+						TextFormat::WHITE.implode(",",$wcfg["bancmds"]);
+		if (isset($wcfg["banitem"]))
+			$txt[] = TextFormat::AQUA.mc::_("Banned(%1%): ",count($wcfg["banitem"])).
+					 TextFormat::WHITE.implode(",",$wcfg["banitem"]);
+
+		if (isset($wcfg["motd"])) {
+			$txt[] = mc::_("MOTD:");
+			if (is_array($wcfg["motd"])) {
+				foreach ($wcfg["motd"] as $ln) {
+					$txt[] = TextFormat::BLUE."  ".$ln.TextFormat::RESET;
+				}
+			} else {
+				$txt[] = TextFormat::BLUE."  ".$wcfg["motd"];
+			}
+		}
+		return $this->paginateText($c,$pageNumber,$txt);
+	}
+	private function attrList($wcfg) {
+		$attr = [];
+		if (isset($wcfg["motd"])) {
+			$attr[] = mc::_("motd");
+		}
+		if (isset($wcfg["protect"])) $attr[] = $wcfg["protect"];
+		if (isset($wcfg["pvp"])) {
+			if ($wcfg["pvp"] === true) {
+				$attr[] = mc::_("pvp:on");
+			} elseif ($wcfg["pvp"] === false) {
+				$attr[] = mc::_("pvp:off");
+			} else {
+				$attr[] = mc::_("pvp:spawn-off");
+			}
+		}
+		if (isset($wcfg["no-explode"]))
+			$attr[] = mc::_("notnt:").$wcfg["no-explode"];
+		if (isset($wcfg["border"])) $attr[] = mc::_("border");
+		if (isset($wcfg["auth"]))
+			$attr[] = mc::_("auth(%1%)",count($wcfg["auth"]));
+		if (isset($wcfg["max-players"]))
+			$attr[]=mc::_("max:").$wcfg["max-players"];
+		if (isset($wcfg["gamemode"]))
+			$attr[]=mc::_("gm:").$wcfg["gamemode"];
+		if (isset($wcfg["unbreakable"]))
+			$attr[]=mc::_("ubab:").count($wcfg["unbreakable"]);
+		if (isset($wcfg["bancmds"]))
+				$attr[]=mc::_("bc:").count($wcfg["bancmds"]);
+		if (isset($wcfg["banitem"]))
+			$attr[]=mc::_("bi:").count($wcfg["banitem"]);
+		return $attr;
+	}
+
+	private function wpList(CommandSender $c,$pageNumber) {
+		$dir = $this->owner->getServer()->getDataPath(). "worlds/";
+		if (!is_dir($dir)) {
+			$c->sendMessage(mc::_("[WP] Missing path %1%",$dir));
+			return true;
+		}
+		$txt = [];
+		$dh = opendir($dir);
+		if (!$dh) return false;
+		$cnt = 0;
+		while (($world = readdir($dh)) !== false) {
+			if ($world == '.' || $world == '..') continue;
+			if (!$this->owner->getServer()->isLevelGenerated($world)) continue;
+			$f = "$dir$world/wpcfg.yml";
+			if (is_file($f)) {
+				$attrs=$this->attrList((new Config($f,Config::YAML))->getAll());
+			} else {
+				$attrs = [];
+			}
+			$ln = "- ".TextFormat::YELLOW.$world;
+			if (count($attrs)) {
+				$ln .= TextFormat::AQUA." (".implode(", ",$attrs).")";
+			}
+			$txt[] = $ln;
+			++$cnt;
+		}
+		if (!count($ln)) {
+			$c->sendMessage(mc::_("Nothing to report"));
+			return true;
+		}
+		array_unshift($txt,mc::_("Worlds: %1%",$cnt));
+		return $this->paginateText($c,$pageNumber,$txt);
+	}
+
+}

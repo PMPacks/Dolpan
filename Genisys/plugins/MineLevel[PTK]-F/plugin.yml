@@ -1,0 +1,23 @@
+name: MineLevel
+main: PTK\MineLevel\Main
+version: 1.0
+api: [2.0.0, 3.0.0, 3.0.0-ALPHA8]
+load: POSTWORLD
+author: PTK-KienPham
+description: Plugin Được Giết Bởi PTK-KienPham.
+commands:
+ level:
+  description: "Xem Cấp Độ Của Bạn"
+ toplevel:
+  description: "Xem Top Level Của Máy Chủ"
+permissions:
+ level:
+  default: true
+  children:
+   level.command:
+    default: true
+ toplevel:
+  default: true
+  children:
+   toplevel.command:
+    default: true

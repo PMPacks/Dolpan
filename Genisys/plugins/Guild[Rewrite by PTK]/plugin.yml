@@ -1,0 +1,19 @@
+name: FactionsPro
+author: [PTK-KienPham]
+description: Plugin guild được viết lại bởi PTK-KienPham
+version: 1.0 rewrite by PTK-KienPham
+main: FactionsPro\FactionMain
+api:
+- 1.14.0
+- 2.0.0
+commands:
+  guilds:
+    description: Sử dụng /g help để biết thêm
+    permission: f.command
+  g:
+    description: Sử dụng /g help để biết thêm
+    permission: f.command
+permissions:
+  f.command:
+    default: true
+    description: "Allow use of all guilds commands"

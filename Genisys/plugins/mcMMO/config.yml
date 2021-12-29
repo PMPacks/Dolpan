@@ -1,0 +1,4 @@
+---
+# Set the amount of EXP levels gained when a player levels up in mcMMO
+exp-gain: 1
+...
